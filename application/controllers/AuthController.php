@@ -13,7 +13,7 @@ class AuthController extends Zend_Controller_Action {
 	}
 
 	public function indexAction() {
-		// action body
+		
 	}
 
 	public function loginAction() {
@@ -22,6 +22,7 @@ class AuthController extends Zend_Controller_Action {
 		}
 		$thefor = $this -> _request -> getParam('thefor');
 		$this -> view -> thefor = $thefor;
+
 		$form = new Form_Login();
 		$request = $this -> getRequest();
 		if ($request -> isPost()) {
