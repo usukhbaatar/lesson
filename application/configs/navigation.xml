@@ -1,0 +1,104 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<config>
+	<nav>
+		<teacherhome>
+			<label>Нүүр</label>
+			<controller>main</controller>
+			<action>index</action>
+			<resource>main</resource>
+			<privilege>index</privilege>
+		</teacherhome>
+		<superadmin>
+			<label>Админ</label>
+			<controller>admin</controller>
+			<action>index</action>
+			<resource>admin</resource>
+			<privilege>index</privilege>
+			<pages>
+				<users>
+					<label>Хэрэглэгчдийн эрх</label>
+					<controller>admin</controller>
+					<action>users</action>
+					<resource>admin</resource>
+					<privilege>users</privilege>
+				</users>
+				<faculty>
+					<label>Тэнхимүүд</label>
+					<controller>faculty</controller>
+					<action>list</action>
+					<resource>faculty</resource>
+					<privilege>list</privilege>
+				</faculty>
+				<degree>
+					<label>Албан тушаал</label>
+					<controller>degree</controller>
+					<action>list</action>
+					<resource>degree</resource>
+					<privilege>list</privilege>
+				</degree>
+				<files>
+					<label>Файлууд</label>
+					<controller>file</controller>
+					<action>list</action>
+					<resource>file</resource>
+					<privilege>list</privilege>
+				</files>
+			</pages>
+		</superadmin>
+		<research>
+			<label>Судалгааны материалууд</label>
+			<controller>research</controller>
+			<action>list</action>
+			<resource>research</resource>
+			<privilege>list</privilege>
+		</research>
+		
+		<my>
+			<label>Миний хуудас</label>
+			<controller>research</controller>
+			<action>my</action>
+			<resource>research</resource>
+			<privilege>my</privilege>
+		</my>
+		
+		<users>
+			<label>Багш нар</label>
+			<controller>users</controller>
+			<action>list</action>
+			<resource>users</resource>
+			<privilege>list</privilege>
+		</users>
+		
+		<register>
+			<label>Бүртгүүлэх</label>
+			<controller>auth</controller>
+			<action>register</action>
+			<resource>auth</resource>
+			<privilege>register</privilege>
+		</register>
+		
+		<update>
+			<label>Миний мэдээлэл</label>
+			<controller>auth</controller>
+			<action>update</action>
+			<resource>auth</resource>
+			<privilege>update</privilege>
+		</update>
+		
+		<login>
+			<label>Нэвтрэх</label>
+			<controller>auth</controller>
+			<action>login</action>
+			<resource>auth</resource>
+			<privilege>login</privilege>
+		</login>
+		
+		<logout>
+			<label>Гарах</label>
+			<controller>auth</controller>
+			<action>logout</action>
+			<resource>auth</resource>
+			<privilege>logout</privilege>
+		</logout>
+	</nav>
+</config>

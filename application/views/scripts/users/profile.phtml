@@ -1,0 +1,231 @@
+<style>
+	.authors {
+		margin-left:5%;
+		width: 89%;
+		margin-bottom: 20px;
+		padding:10px;
+		border: #ededed 1px solid;
+		display: table;
+	}
+	.search-label {
+		float:left;
+		display:table;
+		height:40px;
+		background-color:blue;
+	}
+	.search-label {
+		float:left;
+	}
+	
+	.user {
+		margin-left: 5%;
+	}
+	
+	.results {
+		margin-top:-10px;
+		position:absolute;
+		background-color: white;
+		border-left: #ededed 1px solid;
+		border-right: #ededed 1px solid;
+		z-index: 1000;
+		display:table;
+		width: 298px;
+	}
+	.result {
+		border-bottom: #ededed 1px solid;
+		padding:10px;
+	}
+	.result:hover {
+		background-color: #EFEFEF;
+		cursor: pointer;
+		z-index: 1001;
+	}
+	
+</style>
+
+
+<?php
+foreach ($this -> user as $key => $value) {
+	echo '<h1>' . $value -> firstname . " " . $value ->lastname . '</h1><br/>';
+}
+if ($this -> isYear == false) { 
+	$norm = $this -> rolecredit - $this -> discredits;
+	if ($norm == 0) $precent = 100;
+	else $precent = $this -> credit * 100 / $norm;
+	if ($precent > 100) {$first = 100; $last = $precent - 100;}
+	else {$first = $precent; $last = 0;}
+	?>
+	<div class = "authors"> 
+	<br />
+		<div class = "span3">
+			Гүйцэтгэх: <?php echo $this -> rolecredit;  ?>
+		</div>
+		<div class = "span3">
+			Хөнгөлөлт: <?php echo $this -> discredits;  ?>
+		</div>
+		<div class = "span3">
+			Гүйцэтгэсэн: <?php echo $this -> credit;  ?>
+		</div>
+		<br/><br/>
+		<div class="progress">
+			<div class="bar" aria-valuenow="<?php echo $first; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo  $first; ?>%;">
+		    	<span class="sr-only"></span>
+		  	</div>
+		</div>
+		<?php
+			$i = 0;
+			while ($last > 0) {
+				if ($last > 100) {
+					$first = 100; $last -= 100;
+				} else {
+					$first = $last; $last = 0;
+				}
+				if ($i == 0) {
+					?> 
+						<div class="progress">
+							<div class="bar bar-success" aria-valuenow="<?php echo $first; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo  $first; ?>%;">
+						    	<span class="sr-only"></span>
+						  	</div>
+						</div>
+					<?php
+				} else if ($i == 1) {
+					?> 
+						<div class="progress">
+							<div class="bar bar-warning" aria-valuenow="<?php echo $first; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo  $first; ?>%;">
+						    	<span class="sr-only"></span>
+						  	</div>
+						</div>
+					<?php
+				} else {
+					?> 
+						<div class="progress">
+							<div class="bar bar-danger" role="progressbar" aria-valuenow="<?php echo $first; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo  $first; ?>%;">
+						    	<span class="sr-only"></span>
+						  	</div>
+						</div>
+					<?php
+				}
+				$i++;
+			}
+		?>
+	</div>
+<?php } ?>
+<div class="tabbable">
+<ul id="myTab" class="nav nav-tabs">
+	<li class="active"><a href="#confirmed" data-toggle="tab">Тооцогдсон</a></li>
+	<li class=""><a href="#discounts" data-toggle="tab">Хөнгөлөлтүүд</a></li>
+</ul>
+
+<div id="myTabContent" class="tab-content">
+	<div class="tab-pane fade active in" id="confirmed">
+		<h4>
+			Тооцогдсон эрдэм шинжилгээний ажлууд
+		</h4>
+		<table class = "table table-striped table-responsive" style = "margin-top: 20px;">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Төрөл</th>
+					<th>ББЦаг</th>
+				</tr>
+			</thead>
+		<?php
+		$i = 1;
+		foreach ($this -> confirmed as $item) {
+			if ($this -> year == $item['year']) {
+				echo '<tr><td>'.$i++.'</td>';
+				echo '<td>' . $item['title'].'</td>';
+				echo '<td>' . $item['credit'].'</td></tr>';
+			}
+		}
+		?>
+		
+		</table>
+	</div>
+	<div class="tab-pane fade" id="accepted">
+		<h4>
+			Зөвшөөрөгдсөн эрдэм шинжилгээний ажлууд
+		</h4>
+		<table class = "table table-striped table-responsive" style = "margin-top: 20px;">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Төрөл</th>
+					<th>ББЦаг</th>
+					<th></th>
+				</tr>
+			</thead>
+		<?php
+		$i = 1;
+		foreach ($this -> accepted as $item) {
+			if ($this -> year == $item['year']) {
+				echo '<tr><td>'.$i++.'</td>';
+				echo '<td><a href = "'.$this -> baseUrl().'/research/detail/id/'.$item['id'].'">' . $item['title'].'</a></td>';
+				echo '<td>' . $item['credit'].'</td>';
+				echo '<td>
+					<form method = "post" class="form-inline" action = "'.$this->baseUrl().'/research/insert/id/'.$item['id'].'">
+					  <select name = "year" class="input-small">
+					  	<option value = "'.$item['year'].'">'.$item['year'].' - '.($item['year'] + 1).'</option>
+					  	<option value = "'.($item['year']+1).'">'.($item['year']+1).' - '.($item['year'] + 2).'</option>
+					  </select>
+					  <input type="submit" name="submit" id="submit" value="Зөвшөөрөх">
+					</form>
+				<td></tr>';
+			}
+		}
+		?>
+		</table>
+	</div>
+	<div class="tab-pane fade" id="discounts">
+		<h4>
+			Хөнгөлөлтүүд
+		</h4>
+		<table class = "table table-striped table-responsive" style = "margin-top: 20px;">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Тайлбар</th>
+					<th>Хөнгөлөгдсөн ББЦаг</th>
+				</tr>
+			</thead>
+		<?php
+		$i = 1;
+		foreach ($this -> discount as $item) {
+			echo '<tr><td>'.$i++.'</td>';
+			echo '<td>' . $item['comment'].'</a></td>';
+			echo '<td>' . $item['credit'].'</td></tr>';
+		}
+		?>
+		</table>
+	</div>
+</div>
+</div>
+
+<div class = "pagination pagination-small pagination-centered">
+<ul class="pagination">
+<?php
+if (count($this -> years) > 0) {
+	asort($this -> years);
+	$last = 0;
+	foreach ($this -> years as $value) {
+		if ($last == 0) {
+			if ($value == $this -> year) {
+				echo '<li><a href="javascript:void(0)">&laquo;</a></li>';
+			} else {
+				echo '<li><a href="'.$this -> baseUrl().'/users/profile/id/'. $this -> id.'/year/'.($this -> year - 1).'">&laquo;</a></li>';
+			}
+		}
+		if ($value == $this -> year) echo '<li class = "active"><a href="javascript:void(0)">'.$value.'</a></li>';
+		else echo '<li><a class = "active" href="'.$this -> baseUrl().'/users/profile/id/'.$this -> id.'/year/'.$value.'">'.$value.'</a></li>';
+		$last = $value;
+	}
+	
+	if ($last == $this -> year) {
+		echo '<li><a href="javascript:void(0)">&raquo;</a></li>';
+	} else {
+		echo '<li><a href="'.$this -> baseUrl().'/users/profile/id/'.$this -> id.'/year/'.($this -> year + 1).'">&raquo;</a></li>';
+	}
+}
+?>
+</ul>
+</div>
