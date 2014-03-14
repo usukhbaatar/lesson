@@ -42,11 +42,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		ZendX_JQuery::enableView($view);
 	}
 	
-	protected function _initMailsetup() {
-		$aConfig = $this -> getOptions();
-		$this -> _aMailConfig = array('auth' => 'login', 'username' => $aConfig['email']['username'], 'password' => $aConfig['email']['password'], 'ssl' => $aConfig['email']['ssl'], 'port' => $aConfig['email']['port']);
-		$this -> _strSmtp = $aConfig['email']['server'];
-		Zend_Mail::setDefaultTransport(new Zend_Mail_Transport_Smtp($this -> _strSmtp, $this -> _aMailConfig));
+	public function _initMail() {
+		$config = $this -> getOptions();
+		Zend_Registry :: set('service', $config['resources']['mail']['service']);
+		Zend_Registry :: set('info', $config['resources']['mail']['info']);
+		Zend_Registry :: set('contact', $config['resources']['mail']['contact']);
+		Zend_Registry :: set('usukhbaatar', $config['resources']['mail']['usukhbaatar']);
+		
 	}
 	
 }

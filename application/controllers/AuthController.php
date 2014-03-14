@@ -13,7 +13,7 @@ class AuthController extends Zend_Controller_Action {
 	}
 
 	public function indexAction() {
-		
+
 	}
 
 	public function loginAction() {
@@ -46,17 +46,27 @@ class AuthController extends Zend_Controller_Action {
               								   	   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
               								       Таны цахим шуудангаар идэвхижүүлэх холбоос илгээлээ.
               								       </div>';
-						else
+						else {
 							$this -> view -> errors = '<div class="alert alert-warning alert-dismissable">
               								   	   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-              								       Уучлаарай таны бүртрэл идэвхигүй байна. Таны цахим шуудангаар идэвхижүүлэх холбоос илгээлээ.
+              								       Уучлаарай таны бүртрэл идэвхигүй байна. Таны цахим шууданруу идэвхижүүлэх холбоос илгээлээ.
               								       </div>';
+						}
 						$id = $authStorage -> read() -> id;
 						$code = md5($id . "Lesson.ForU$<()()()()(%%%)and#%4'5&*" . ($id + 1) . rand(0, 2000));
-						$body = 'Идэвхижүүлэх холбоос: <a href = "http://lesson.foru.mn/users/active/code/' . $code . '">' . 'http://lesson.foru.mn/users/active/code/' . $code . '</a>';
+
+						$name = "ForU.mn";
+						$sender = Zend_Registry::get('service');
+						$to = array('0' => array('name' => $authStorage -> read() -> fname . " " . $authStorage -> read() -> lanem, 'email' => $authStorage -> read() -> email));
+						$subject = "Lesson.ForU.MN";
+						$body = '<h1>Сайн байна уу?</h1> <br/> Та дараах холбоос дээр дарснаар өөрийн бүртгэлээ идэвхижүүлэх боломжтой. <br /> Идэвхижүүлэх холбоос: <a href = "http://lesson.foru.mn/users/active/code/' . $code . '">' . 'http://lesson.foru.mn/users/active/code/' . $code . '</a>';
+
+						$mail = new My_Mail($name, $sender, $to, $subject, $body);
+						$res = $mail -> sendEmail();
 
 						$model = new Model_DbTable_Activation();
-						$model -> insert(array('uid' => $id, 'code' => md5($code . "ForU.Lesson"), 'date' => date('Y-m-d')));
+						$model -> insert(array('uid' => $id, 'code' => md5($code . "lesson.foru.mn"), 'date' => date('Y-m-d')));
+						
 						Zend_Auth::getInstance() -> clearIdentity();
 					} else {
 						$this -> _redirect('index/index');
@@ -91,12 +101,24 @@ class AuthController extends Zend_Controller_Action {
 				$user = new Model_DbTable_Users();
 				foreach ($user -> fetchAll('email = \'' . $email . '\'') as $key => $value) {
 					$id = $value -> id;
+					$email = $value -> email;
+					$fname = $value -> fname;
+					$lname = $value -> lnamel;
 				}
 
 				$code = hash('haval224,5', md5(hash('sha512', md5($id . "ForReset$<$or#***4'5&*" . ($id + 7) . rand(0, 2000)))));
 
+				$name = "ForU.mn";
+				$sender = Zend_Registry::get('service');
+				$to = array('0' => array('name' => $fname . " " . $lanem, 'email' => $email));
+				$subject = "Lesson.ForU.MN";
+				$body = '<h1>Сайн байна уу?</h1> <br/> Та дараах холбоос дээр дарснаар өөрийн нууц үгээ сэргээх боломжтой. <br /> Холбоос: <a href = "http://lesson.foru.mn/auth/resrt/code/' . $code . '">' . 'http://lesson.foru.mn/auth/reset/code/' . $code . '</a>';
+
+				$mail = new My_Mail($name, $sender, $to, $subject, $body);
+				$res = $mail -> sendEmail();
+
 				$model = new Model_DbTable_Reset();
-				$model -> insert(array('uid' => $id, 'code' => md5($code . "ResetYourPassword-Haha*lol.Lesson"), 'date' => date('Y-m-d')));
+				$model -> insert(array('uid' => $id, 'code' => md5($code . "lesson.foru.mn"), 'date' => date('Y-m-d')));
 
 				$this -> view -> errors = '<div class="alert alert-success alert-dismissable">
               								   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -113,7 +135,7 @@ class AuthController extends Zend_Controller_Action {
 		$code = $this -> _request -> getParam('code');
 		$model = new Model_DbTable_Reset();
 		$id = NULL;
-		foreach ($model -> fetchAll('code = \'' .md5($code . "ResetYourPassword-Haha*lol.Lesson") . '\'') as $key => $value) {
+		foreach ($model -> fetchAll('code = \'' .md5($code . "lesson.foru.mn") . '\'') as $key => $value) {
 			$id = $value -> uid;
 		}
 		if ($id == NULL) {
@@ -130,7 +152,7 @@ class AuthController extends Zend_Controller_Action {
 					$password = md5($form -> getValue('password'));
 					$user = new Model_DbTable_Users();
 					$user -> update(array('password' => $password), 'id = ' . $id);
-					$this -> redirect('auth/login/thefor/new');
+					$this -> redirect('auth/login');
 				}
 			}
 

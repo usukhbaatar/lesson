@@ -2,15 +2,6 @@
 
 class UsersController extends Zend_Controller_Action {
 	
-	private function send($subject, $body, $email) {
-	    $mail = new Zend_Mail();
-	    $mail->setBodyHtml($body);
-	    $mail->setFrom('osohoo02@gmail.com');
-	    $mail->addTo($email);
-	    $mail->setSubject($subject);
-	    $mail->send();
-	}
-
 	public function init() {
 		/* Initialize action controller here */
 	}
@@ -59,14 +50,17 @@ class UsersController extends Zend_Controller_Action {
 					$code = NULL;
 					$code = md5($id . "ForU$<))))()(and#%4'5&*" . rand(0, 2000));
 					
-					$body = '<h1>Сайн байна уу?</h1> <h2>Тавтай морил.</h2><br/>';
-					$body .= 'Таны идэвхижүүлэх холбоос: <a href = "http://lesson.foru.mn/users/active/code/' . $code. '">' . 'http://lesson.foru.mn/users/active/code/' . $code. '</a>';
-					
-					//$mail = new Model_Mail();
-					$this -> send('Бүртгэл идэвхижүүлэх', $body, $email);
+					$name = "ForU.mn";
+					$sender = Zend_Registry::get('service');
+					$to = array('0' => array('name' => $fname . " " . $lanem, 'email' => $email));
+					$subject = "Lesson.ForU.MN";
+					$body = '<h1>Сайн байна уу?</h1> <br/> Та дараах холбоос дээр дарснаар өөрийн нууц үгээ сэргээх боломжтой. <br /> Холбоос: <a href = "http://lesson.foru.mn/users/active/code/' . $code . '">' . 'http://lesson.foru.mn/users/active/code/' . $code . '</a>';
+				
+					$mail = new My_Mail($name, $sender, $to, $subject, $body);
+					$res = $mail -> sendEmail();
 					
 					$model = new Model_DbTable_Activation();
-					$model -> insert(array('uid' => $id, 'code' => md5($code . "ForU.Lesson"), 'date' => date('Y-m-d')));
+					$model -> insert(array('uid' => $id, 'code' => md5($code . "lesson.foru.mn"), 'date' => date('Y-m-d')));
 
 					$this -> view -> errors = '<div class="alert alert-success alert-dismissable">
               								   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -92,7 +86,7 @@ class UsersController extends Zend_Controller_Action {
 	}
 
 	public function activeAction() {
-		$code = md5($this -> _request -> getParam('code') . "ForU.Lesson");
+		$code = md5($this -> _request -> getParam('code') . "lesson.foru.mn");
 		$model = new Model_DbTable_Activation();
 		foreach ($model -> fetchAll('code = ' . "'" . $code . "'") as $key => $value) {
 			$id = $value -> uid;
