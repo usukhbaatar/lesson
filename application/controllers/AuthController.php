@@ -55,18 +55,20 @@ class AuthController extends Zend_Controller_Action {
 						$id = $authStorage -> read() -> id;
 						$code = md5($id . "Lesson.ForU$<()()()()(%%%)and#%4'5&*" . ($id + 1) . rand(0, 2000));
 
-						$name = "ForU.mn";
-						$sender = Zend_Registry::get('service');
-						$to = array('0' => array('name' => $authStorage -> read() -> fname . " " . $authStorage -> read() -> lanem, 'email' => $authStorage -> read() -> email));
-						$subject = "Lesson.ForU.MN";
-						$body = '<h1>Сайн байна уу?</h1> <br/> Та дараах холбоос дээр дарснаар өөрийн бүртгэлээ идэвхижүүлэх боломжтой. <br /> Идэвхижүүлэх холбоос: <a href = "http://lesson.foru.mn/users/active/code/' . $code . '">' . 'http://lesson.foru.mn/users/active/code/' . $code . '</a>';
-
-						$mail = new My_Mail($name, $sender, $to, $subject, $body);
-						$res = $mail -> sendEmail();
-
 						$model = new Model_DbTable_Activation();
 						$model -> insert(array('uid' => $id, 'code' => md5($code . "lesson.foru.mn"), 'date' => date('Y-m-d')));
-						
+
+						$name = "ForU.MN";
+						$sender = Zend_Registry::get('service');
+						$to = array('0' => array('name' => $authStorage -> read() -> fname . " " . $authStorage -> read() -> lname, 'email' => $authStorage -> read() -> email));
+						$subject = "Lesson.ForU.MN";
+						$body = '<h1>Сайн байна уу?</h1> <br/> <h2> Тавтай морил </h2> <br/> Та дараах холбоос дээр дарснаар өөрийн бүртгэлээ идэвхижүүлэх боломжтой. <br /> Холбоос: <a href = "http://lesson.foru.mn/users/active/code/' . $code . '">' . 'http://lesson.foru.mn/users/active/code/' . $code . '</a>';
+
+						$model = new Model_DbTable_Email();
+						$email_id = $model -> insert(array('name' => $name, 'sender' => $sender, 'to_name' => $to[0]['name'], 'to_email' => $to[0]['email'], 'subject' => $subject, 'body' => $body));
+
+						exec("php " . APPLICATION_PATH . "/../scripts/email.php " . $email_id . " GGT  > " . APPLICATION_PATH . "/../scripts/log.log 2>&1 &");
+
 						Zend_Auth::getInstance() -> clearIdentity();
 					} else {
 						$this -> _redirect('index/index');
@@ -103,22 +105,24 @@ class AuthController extends Zend_Controller_Action {
 					$id = $value -> id;
 					$email = $value -> email;
 					$fname = $value -> fname;
-					$lname = $value -> lnamel;
+					$lname = $value -> lname;
 				}
 
 				$code = hash('haval224,5', md5(hash('sha512', md5($id . "ForReset$<$or#***4'5&*" . ($id + 7) . rand(0, 2000)))));
 
-				$name = "ForU.mn";
-				$sender = Zend_Registry::get('service');
-				$to = array('0' => array('name' => $fname . " " . $lanem, 'email' => $email));
-				$subject = "Lesson.ForU.MN";
-				$body = '<h1>Сайн байна уу?</h1> <br/> Та дараах холбоос дээр дарснаар өөрийн нууц үгээ сэргээх боломжтой. <br /> Холбоос: <a href = "http://lesson.foru.mn/auth/resrt/code/' . $code . '">' . 'http://lesson.foru.mn/auth/reset/code/' . $code . '</a>';
-
-				$mail = new My_Mail($name, $sender, $to, $subject, $body);
-				$res = $mail -> sendEmail();
-
 				$model = new Model_DbTable_Reset();
 				$model -> insert(array('uid' => $id, 'code' => md5($code . "lesson.foru.mn"), 'date' => date('Y-m-d')));
+
+				$name = "ForU.MN";
+				$sender = Zend_Registry::get('service');
+				$to = array('0' => array('name' => $fname . " " . $lname, 'email' => $email));
+				$subject = "Lesson.ForU.MN";
+				$body = '<h1>Сайн байна уу?</h1> <br/> Та дараах холбоос дээр дарснаар өөрийн нууц үгээ сэргээх боломжтой. <br /> Холбоос: <a href = "http://lesson.foru.mn/auth/reset/code/' . $code . '">' . 'http://lesson.foru.mn/auth/reset/code/' . $code . '</a>';
+
+				$model = new Model_DbTable_Email();
+				$email_id = $model -> insert(array('name' => $name, 'sender' => $sender, 'to_name' => $to[0]['name'], 'to_email' => $to[0]['email'], 'subject' => $subject, 'body' => $body));
+
+				exec("php " . APPLICATION_PATH . "/../scripts/email.php " . $email_id . " GGT  > " . APPLICATION_PATH . "/../scripts/log.log 2>&1 &");
 
 				$this -> view -> errors = '<div class="alert alert-success alert-dismissable">
               								   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
