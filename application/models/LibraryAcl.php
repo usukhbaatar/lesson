@@ -10,17 +10,16 @@ class Model_LibraryAcl extends Zend_Acl {
 		$this -> add(new Zend_Acl_Resource('index'));
 		$this -> add(new Zend_Acl_Resource('users'));
 		$this -> add(new Zend_Acl_Resource('error'));
+		$this -> add(new Zend_Acl_Resource('lesson'));
 
-		$this -> allow('guests', 'auth', array('login', 'forgot', 'reset'));
+		$this -> allow('guests', 'auth', array('login', 'forgot', 'reset', 'logout'));
 		$this -> allow('guests', 'error', 'error');
-		$this -> allow('guests', 'index', array('index', 'invalid'));
 		$this -> allow('guests', 'users', array('register', 'active'));
 
 		$this -> deny('users', 'auth', array('login', 'register'));
-		$this -> allow('users', 'auth', array('logout'));
-		$this -> allow('users', 'users', array('logout', 'manage', 'profile'));
+		$this -> allow('users', 'users', array('logout', 'manage', 'profile', 'delete'));
 		
-		$this -> allow('admins', 'users', array('delete'));
+		$this -> allow('admins', 'lesson', array('add', 'list', 'edit', 'delete', 'order', 'view'));
 	}
 
 }

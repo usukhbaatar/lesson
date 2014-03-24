@@ -1,0 +1,18 @@
+<h2>Миний хичээлүүд</h2>
+<hr class = "bottom-right"/>
+<?php
+foreach ($this -> list as $key => $value) { ?>
+	<div class="row">
+      <div class="col-xs-12">
+        <h3><?php echo $value -> name; ?></h3>
+        <p><?php echo $value -> description; ?></p>
+        <p class="lead"><a href = "<?php echo $this -> baseUrl() ?>/lesson/view/id/<?php echo $value -> id; ?>" class="btn btn-default">Дэлгэрэнгүй</a></p>
+        <ul class="list-inline pull-right">
+        	<li><a href="<?php echo $this -> baseUrl() ?>/lesson/delete/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
+        	<li><a href="<?php echo $this -> baseUrl() ?>/lesson/edit/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-edit"></i> Засварлах</a></li>
+      </div>
+    </div>
+    <hr>
+	<?php
+}
+?>

@@ -104,13 +104,15 @@
     <div class="row">
       <div class="col-xs-12">
         <?php echo $this -> layout() -> content; ?>
-		<pre><code class="javascript"><span class="keyword">var</span> edit = <span class="keyword">function</span>() {
-  $(<span class="string">'.click2edit'</span>).summernote();
-};</code></pre>
       </div>
     </div>
-    <hr>
+    <hr />
     
+    
+    <pre><code class="javascript"><span class="keyword">var</span> edit = <span class="keyword">function</span>() {
+  $(<span class="string">'.click2edit'</span>).summernote();
+};</code></pre>
+
     <div class="row">
       <div class="col-xs-12">
         <h2>Article Heading</h2>
@@ -146,23 +148,14 @@
   <hr>
   
 </div><!-- /.container -->
-        
         <script type='text/javascript' src="<?php echo $baseUrl ?>/js/jquery.min.js"></script>
-
         <script type='text/javascript' src="<?php echo $baseUrl ?>/dist/js/bootstrap.min.js"></script>
-		
 		<script type='text/javascript' src="<?php echo $baseUrl ?>/js/latex.js"></script>
-
-
-        
         <!-- JavaScript jQuery code from Bootply.com editor -->
-        
         <script type='text/javascript'>
-        
         $(document).ready(function() {
         	$(".latex").latex();
         });
-        
         </script>
         
     </body>
