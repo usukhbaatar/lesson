@@ -33,6 +33,15 @@ class LessonController extends Zend_Controller_Action {
 		$id = Zend_Registry::get('id');
 		$model = new Model_DbTable_Lesson();
 		$this -> view -> list = $model -> fetchAll($model -> select() -> where('uid = ' . Zend_Registry::get('id')) -> order('order'));
+		
+		$req = array();
+		$request = new Model_DbTable_Request();
+		$result = $request -> fetchAll();
+		foreach ($result as $key => $value) {
+			if (!isset($req[$value -> lid]))	$req[$value -> lid] = array(0, 0, 0);
+			$req[$value -> lid][$value -> status]++;
+		}
+		$this -> view -> req = $req;
 	}
 
 	public function editAction() {
@@ -78,5 +87,18 @@ class LessonController extends Zend_Controller_Action {
 	public function orderAction() {
 		
 	}
-
+	
+	public function studentsAction() {
+		$id = $this -> _request -> getParam('id');
+		$val = $this -> _request -> getParam('val');
+		$this -> view -> val = $val;
+		$db = Zend_Registry::get('db');
+		$sql = "SELECT users.fname, users.lname, request.id FROM users, request WHERE request.lid = " . $id . ' AND request.status = ' . $val . ' AND request.uid = users.id';
+		$this -> view -> list = $db -> fetchAll($db -> query($sql));
+		
+		$model = new Model_DbTable_Lesson();
+		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
+			$this -> view -> name = $value -> name;
+		}
+	}
 }

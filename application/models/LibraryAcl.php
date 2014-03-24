@@ -19,7 +19,7 @@ class Model_LibraryAcl extends Zend_Acl {
 		$this -> deny('users', 'auth', array('login', 'register'));
 		$this -> allow('users', 'users', array('logout', 'manage', 'profile', 'delete'));
 		
-		$this -> allow('admins', 'lesson', array('add', 'list', 'edit', 'delete', 'order', 'view'));
+		$this -> allow('admins', 'lesson', array('add', 'list', 'edit', 'delete', 'order', 'view', 'students'));
 	}
 
 }

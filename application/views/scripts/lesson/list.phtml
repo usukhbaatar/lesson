@@ -1,7 +1,14 @@
 <h2>Миний хичээлүүд</h2>
 <hr class = "bottom-right"/>
 <?php
-foreach ($this -> list as $key => $value) { ?>
+foreach ($this -> list as $key => $value) {
+	$a = 0; $b = 0; $c = 0;
+	if (isset($this -> req[$value -> id])) {
+		$a = $this -> req[$value -> id][0];
+		$b = $this -> req[$value -> id][1];
+		$c = $this -> req[$value -> id][2];
+	}
+	?>
 	<div class="row">
       <div class="col-xs-12">
         <h3><?php echo $value -> name; ?></h3>
@@ -10,6 +17,26 @@ foreach ($this -> list as $key => $value) { ?>
         <ul class="list-inline pull-right">
         	<li><a href="<?php echo $this -> baseUrl() ?>/lesson/delete/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
         	<li><a href="<?php echo $this -> baseUrl() ?>/lesson/edit/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-edit"></i> Засварлах</a></li>
+        </ul>
+        
+        <ul class="list-inline pull-left">
+        	<span style = "color: #2a6496">Оюутнууд: </span>
+        	<li><a class = "tt" data-toggle="tooltip" data-original-title="Судлах хүсэлт" href="<?php echo $this -> baseUrl() ?>/lesson/students/id/<?php echo $value -> id ?>/val/0">
+        			<i class="glyphicon glyphicon-globe"></i> <?php echo $a ?>
+        		</a>
+        	</li>
+        	<li>
+        		<a class = "tt" data-toggle="tooltip" data-original-title="Судалж байгаа" href="<?php echo $this -> baseUrl() ?>/lesson/students/id/<?php echo $value -> id ?>/val/1">
+        			<i class="glyphicon glyphicon-ok"></i> <?php echo $b ?>
+        		</a>
+        	</li>
+        	<li>
+        		<a class = "tt" data-toggle="tooltip" data-original-title="Цуцалсан" href="<?php echo $this -> baseUrl() ?>/lesson/delete/id/<?php echo $value -> id ?>/val/2">
+        			<i class="glyphicon glyphicon-remove"></i> <?php echo $c ?>
+        		</a>
+        	</li>
+        </ul>
+        
       </div>
     </div>
     <hr>
