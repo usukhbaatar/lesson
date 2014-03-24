@@ -18,6 +18,12 @@ else
 		<th colspan="2"></th>
 	</thead>
 	<tbody>
-		<?php echo 
+		<?php
+		foreach ($this -> list as $key => $value) {
+			echo '<tr><td>' . substr_unicode($value -> lname, 0, 1) . $value -> fname . '<td>';
+			echo '<td></td>';
+			echo '<td></td></tr>';
+		} 
+		?>
 	</tbody>
 </table>
