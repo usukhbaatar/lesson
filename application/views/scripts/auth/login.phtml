@@ -1,4 +1,4 @@
-<h4><?php if ($this -> thefor == 'code') echo 'Идэвхижүүлэх код авах' ; else echo 'Нэвтрэх' ?></h4>
+<h2 class = "header"><?php if ($this -> thefor == 'code') echo 'Идэвхижүүлэх код авах' ; else echo 'Нэвтрэх' ?></h2>
 <hr/>
 <?php
 if ($this -> thefor == 'new') {
@@ -8,3 +8,17 @@ if ($this -> thefor == 'new') {
 }
 echo $this -> errors;
 echo $this -> form;
+
+?>
+
+<script>
+
+$(document).ready(function(){
+	if ($("#username").val() != "") {
+		$("#password").focus();
+	} else {
+		$("#username").focus();
+	}
+});
+
+</script>

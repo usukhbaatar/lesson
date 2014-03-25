@@ -1,0 +1,17 @@
+h2.header {
+	color:#428bca;
+}
+
+.left-content {
+	margin-top: -20px;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-right-color: #e7e7e7;
+}
+
+.right-content {
+	margin-top: -20px;
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #e7e7e7;
+}

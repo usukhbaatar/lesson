@@ -114,7 +114,7 @@ class UsersController extends Zend_Controller_Action {
 		$val = $this -> _request -> getParam('val');
 		$id = Zend_Registry::get('id');
 		$request = $this -> getRequest();
-		
+
 		if ($val == 'profile') {
 			$form = new Form_Register();
 			$form -> removeElement('email');
@@ -124,58 +124,64 @@ class UsersController extends Zend_Controller_Action {
 			$form -> removeElement('role');
 			$form -> removeElement('username');
 			$form -> removeElement('submit');
-			
+
+			$element = new Zend_Form_Element_Textarea('bio');
+			$element -> setLabel('Миний тухай:') -> setAttrib('class', 'form-control');
+			$form -> addElement($element);
+
 			$element = new Zend_Form_Element_Text('ide_username');
-			$element -> setLabel('ideone.com - ийн нэвтрэх нэр:')
-					 -> setAttrib('class', 'form-control');
+			$element -> setLabel('ideone.com - ийн нэвтрэх нэр:') -> setAttrib('class', 'form-control');
 			$form -> addElement($element);
-			
+
 			$element = new Zend_Form_Element_Password('ide_password');
-			$element -> setLabel('ideone.com - ийн нууц үг:')
-					 -> setAttrib('class', 'form-control');
+			$element -> setLabel('ideone.com - ийн нууц үг:') -> setAttrib('class', 'form-control');
 			$form -> addElement($element);
-			
+
 			$submit = new Zend_Form_Element_Submit('submit');
-        	$submit -> setLabel('Хадгалах')
-					-> setAttrib('class', 'btn btn-default');
+			$submit -> setLabel('Хадгалах') -> setAttrib('class', 'btn btn-default');
 			$form -> addElement($submit);
-			
+
 			$model = new Model_DbTable_Users();
-			
+
 			if ($request -> isPost()) {
 				if ($form -> isValid($this -> _request -> getPost())) {
 					$model = new Model_DbTable_Users();
 					$fname = $form -> getValue('fname');
-					$lname = $form -> getValue('fname');
+					$lname = $form -> getValue('lname');
+					$bio = $form -> getValue('bio');
 					$iuser = $form -> getValue('ide_username');
-					$ipass = $form -> getValue('ide_password');					
-					$model -> update(array('fname' => $fname, 'lname' => $lname, 'iuser' => $iuser, 'ipass' => $ipass), 'id = ' . $id);
-					
+					$ipass = $form -> getValue('ide_password');
+					if ($ipass == NULL) {
+						$model -> update(array('fname' => $fname, 'lname' => $lname, 'bio' => $bio, 'iuser' => $iuser), 'id = ' . $id);
+					} else {
+						$model -> update(array('fname' => $fname, 'lname' => $lname, 'bio' => $bio, 'iuser' => $iuser, 'ipass' => $ipass), 'id = ' . $id);
+					}
 					$this -> _redirect('users/profile');
 				}
 			}
-			
+
 			$result = $model -> fetchAll('id = ' . $id);
-			
+
 			foreach ($result as $key => $value) {
 				$form -> getElement('fname') -> setValue($value -> fname);
 				$form -> getElement('lname') -> setValue($value -> lname);
+				$form -> getElement('bio') -> setValue($value -> bio);
 				$form -> getElement('ide_username') -> setValue($value -> iuser);
 				$form -> getElement('ide_password') -> setValue($value -> ipass);
 			}
-			
+
 			$form -> setAction($this -> view -> baseUrl() . '/users/manage/val/profile');
-			
+
 		} else if ($val == 'password') {
 			$form = new Form_ChangePassword();
 			if ($request -> isPost()) {
 				if ($form -> isValid($this -> _request -> getPost())) {
 					$model = new Model_DbTable_Users();
 					$result = $model -> fetchAll('id = ' . $id);
-					
+
 					$old = md5($form -> getvalue('old'));
 					$new = md5($form -> getValue('password'));
-					
+
 					foreach ($result as $key => $value) {
 						if ($value -> password == $old) {
 							$model -> update(array('password' => $new), 'id = ' . $id);
@@ -191,7 +197,7 @@ class UsersController extends Zend_Controller_Action {
 			}
 			$form -> setAction($this -> view -> baseUrl() . '/users/manage/val/password');
 		}
-		
+
 		$this -> view -> form = $form;
 	}
 

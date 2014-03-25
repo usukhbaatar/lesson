@@ -1,7 +1,18 @@
-<h4>Миний мэдээлэл</h4>
+<h2 class = "header">Миний мэдээлэл</h2>
 <hr/>
 
 <?php
 
 echo $this -> errors;
 echo $this -> form;
+
+?>
+
+<script>
+
+$(document).ready(function(){
+	$("#lname").focus();
+	$("#old").focus();
+});
+
+</script>
