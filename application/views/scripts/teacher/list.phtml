@@ -6,9 +6,7 @@ foreach ($this -> list as $key => $value) { ?>
       <div class="col-xs-12">
         <h3><?php echo mb_substr($value -> lname, 0, 1, 'utf8') . '. ' . $value -> fname; ?></h3>
         
-        <p><?php echo mb_substr($value -> bio, 0, 100, 'utf8');
-        		if (mb_substr($value -> bio, 0, 100, 'utf8') != mb_substr($value -> bio, 0, 99, 'utf8'))
-        			echo '...'; ?></p>
+        <p><?php echo $value -> bio; ?></p>
         
         <ul class="list-inline pull-right">
         	<li><a href = "<?php echo $this -> baseUrl() ?>/teacher/lessons/id/<?php echo $value -> id; ?>"><i class="glyphicon glyphicon-indent-left"></i> Хичээлүүд</a></li>

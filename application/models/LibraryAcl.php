@@ -7,6 +7,7 @@ class Model_LibraryAcl extends Zend_Acl {
 		$this -> addRole(new Zend_Acl_Role('admins'), 'users');
 
 		$this -> add(new Zend_Acl_Resource('auth'));
+		$this -> add(new Zend_Acl_Resource('file'));
 		$this -> add(new Zend_Acl_Resource('index'));
 		$this -> add(new Zend_Acl_Resource('users'));
 		$this -> add(new Zend_Acl_Resource('error'));
@@ -20,6 +21,7 @@ class Model_LibraryAcl extends Zend_Acl {
 		$this -> deny('users', 'auth', array('login', 'register'));
 		$this -> allow('users', 'users', array('logout', 'manage', 'profile', 'delete'));
 		$this -> allow('users', 'teacher', array('list', 'lessons', 'request'));
+		$this -> allow('users', 'file', array('upload', 'download', 'delete', 'list'));
 		
 		$this -> allow('admins', 'lesson', array('add', 'list', 'edit', 'delete', 'order', 'view', 'students', 'save', 'get'));
 	}

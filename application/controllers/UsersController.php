@@ -126,7 +126,7 @@ class UsersController extends Zend_Controller_Action {
 			$form -> removeElement('submit');
 
 			$element = new Zend_Form_Element_Textarea('bio');
-			$element -> setLabel('Миний тухай:') -> setAttrib('class', 'form-control');
+			$element -> setLabel('Миний тухай:') -> setAttrib('class', 'form-control summernote-small');
 			$form -> addElement($element);
 
 			$element = new Zend_Form_Element_Text('ide_username');
