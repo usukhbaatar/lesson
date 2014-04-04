@@ -15,7 +15,7 @@ class Form_Lesson extends Zend_Form
 		
 		$descriptoin = new Zend_Form_Element_Textarea('description');
 		$descriptoin -> setLabel('Хичээлийн тодорхойлолт:')
-			  		 -> setAttrib('class', 'form-control');
+			  		 -> setAttrib('class', 'form-control summernote-small');
 		
         $submit = new Zend_Form_Element_Submit('submit');
         $submit -> setLabel('Хадгалах')

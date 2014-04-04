@@ -1,5 +1,5 @@
-<h2>Миний хичээлүүд</h2>
-<hr class = "bottom-right"/>
+<h2 class = "header">Миний хичээлүүд</h2>
+<hr/>
 <?php
 foreach ($this -> list as $key => $value) {
 	$a = 0; $b = 0; $c = 0;
@@ -13,10 +13,11 @@ foreach ($this -> list as $key => $value) {
       <div class="col-xs-12">
         <h3><?php echo $value -> name; ?></h3>
         <p><?php echo $value -> description; ?></p>
-        <p class="lead"><a href = "<?php echo $this -> baseUrl() ?>/lesson/view/id/<?php echo $value -> id; ?>" class="btn btn-default">Дэлгэрэнгүй</a></p>
         <ul class="list-inline pull-right">
         	<li><a href="<?php echo $this -> baseUrl() ?>/lesson/delete/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
         	<li><a href="<?php echo $this -> baseUrl() ?>/lesson/edit/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-edit"></i> Засварлах</a></li>
+        	<li><a href="<?php echo $this -> baseUrl() ?>/tesk/list/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-tasks"></i> Даалгаварууд</a></li>
+        	<li><a href="<?php echo $this -> baseUrl() ?>/lesson/view/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-share-alt"></i> Дэлгэрэнгүй</a></li>
         </ul>
         
         <ul class="list-inline pull-left">
@@ -31,7 +32,7 @@ foreach ($this -> list as $key => $value) {
         		</a>
         	</li>
         	<li>
-        		<a class = "tt" data-toggle="tooltip" data-original-title="Цуцалсан" href="<?php echo $this -> baseUrl() ?>/lesson/delete/id/<?php echo $value -> id ?>/val/2">
+        		<a class = "tt" data-toggle="tooltip" data-original-title="Цуцалсан" href="<?php echo $this -> baseUrl() ?>/lesson/students/id/<?php echo $value -> id ?>/val/2">
         			<i class="glyphicon glyphicon-remove"></i> <?php echo $c ?>
         		</a>
         	</li>

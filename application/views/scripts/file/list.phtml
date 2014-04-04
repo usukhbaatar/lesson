@@ -1,0 +1,98 @@
+<style type="text/css">
+	.z-clip-wrap{
+		position: relative; display: inline-block;
+	}
+</style>
+
+<h2 class = "header">Файлын жагсаалт</h2>
+<hr/>
+<table class="table table-striped" style="position: relative">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Нэр</th>
+			<th>URI</th>
+			<th colspan="2"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php
+		$i = ($this -> page - 1) * 20;
+		foreach ($this -> paginator as $file) { ?>
+			<tr id = "row<?php echo $file['id'] ?>">
+				<td><?php echo ++$i; ?></td>
+				<td><?php echo $file['name']; ?></td>
+				<td>
+					<span class="z-clip-wrap">
+						<a class="label label-primary copy-button" id="<?php echo $file['uri'] ?>" href="javascript:void(0)">
+							<i class="glyphicon glyphicon-log-out"></i> URI
+						</a>
+					</span>
+				</td>
+				<td><a class="label label-default" href="<?php echo $this -> baseUrl() ?>/file/download/id/<?php echo $file['id'] ?>"><i class="glyphicon glyphicon-download"></i> Татах</a></td>
+				<td><a class="label label-danger" href="javascript:delete1('<?php echo $file['id'] ?>')"><i class="glyphicon glyphicon-trash"></i> Устгах</a></td>
+			</tr>
+		<?php } ?>
+	</tbody>
+</table>
+
+<!-- Small modal -->
+
+<div class = "quick-message">Ачаалж байна...</div>
+
+<script src="<?php echo $this -> baseUrl(); ?>/public/plugins/zclip/jquery.zclip.min.js"></script>
+
+<script>
+
+function delete1(id) {
+	$(".quick-message").html('Ачаалж байна...');
+	$(".quick-message").slideDown();
+	$.ajax({
+        type: "POST",
+        url: baseUrl + "/file/delete/id/" + id,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(res) {
+        	$('.quick-message').hide();
+            $("#row" + id).hide('slow');
+        },
+        error: function() {
+        	$('.quick-message').hide();
+        }
+    });
+}
+
+
+$(document).ready(function() {
+	$('.quick-message').hide();
+	$('.quick-message').removeClass('hide');
+
+	function hide() {
+		$( ".quick-message" ).hide();
+	}
+
+	$('.quick-message').click(function() {
+		$(this).hide();
+	});
+	function copied() {
+		if ($(".quick-message").is( ":hidden" )) {
+			msg = '<h3>Холбоосыг хуулсан.</h3><p>энд дарвар алга болох болно.</p>';
+			$(".quick-message").html(msg);
+		    $(".quick-message").slideDown();
+		    setTimeout(hide, 3000);
+		}
+	}
+
+	$(".copy-button").zclip({
+        path: baseUrl + "/public/plugins/zclip/ZeroClipboard.swf",
+        copy: function() { return baseUrl + $(this).attr('id'); },
+        afterCopy:function(){
+            copied();
+        }
+    });
+});
+
+
+</script>
+

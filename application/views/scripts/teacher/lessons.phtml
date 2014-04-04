@@ -1,0 +1,61 @@
+<h2 class = "header">Хичээлүүд</h2>
+<span>Багш: <strong><a href = "<?php echo $this -> baseUrl()?>/users/profile/id/<?php echo $this -> tid; ?>"><?php echo $this -> teacher; ?></a></strong></span>
+<hr"/>
+<?php
+foreach ($this -> list as $key => $value) {?>
+	<div class="row">
+      <div class="col-xs-12">
+        <h3><?php echo $value -> name; ?></h3>
+        <p><?php echo $value -> description; ?></p>
+        <ul class="list-inline pull-right">
+        	<li><a href = "<?php echo $this -> baseUrl() ?>/users/profile/id/<?php echo $value -> id; ?>"><i class="glyphicon glyphicon-share-alt"></i> Дэлгэрэнгүй</a></li>
+        	<?php if ( isset($this -> req[$value -> id])) { 
+	    		if ($this -> req[$value -> id] == 2) { ?>
+					<li><a href="javascript:rerequest(<?php echo $value -> id ?>)"><i class="glyphicon glyphicon-send"></i> Дахин хүсэлт илгээх</a></li>
+	        	<?php } else if($this -> req[$value -> id] == 1) { ?>
+					<li><a href="javascript:cancel(<?php echo $value -> id ?>)"><i class="glyphicon glyphicon-send"></i> Хичээлийг хаах</a></li>
+	        	<?php } else { ?>
+					<li><a href="javascript:cancel(<?php echo $value -> id ?>)"><i class="glyphicon glyphicon-send"></i> Хүсэлтийг цуцлах</a></li>
+	        	<?php } ?>
+    		<?php } else { ?>
+				<li><a href="javascript:request(<?php echo $value -> id ?>)"><i class="glyphicon glyphicon-send"></i> Хүсэлт илгээх</a></li>
+        <?php } ?>
+        </ul>
+      </div>
+    </div>
+    <hr>
+	<?php
+}
+?>
+<script>
+function sendRequest(url) {
+	$.ajax({
+		type: "POST",
+		url: url,
+		data: "format = json",
+		async: false,
+		success: function(res){
+			window.location.reload();
+		},
+		error: function() {
+			alert("Уучлаарай ямар нэг алдаа гарлаа.");
+		}
+	});
+}
+
+function cancel(id) {
+	var url = baseUrl + "/teacher/request/q/0/id/"+id;
+	sendRequest(url);
+}
+
+function request(id) {
+	var url = baseUrl + "/teacher/request/q/1/id/"+id;
+	sendRequest(url);
+}
+
+function rerequest(id) {
+	var url = baseUrl + "/teacher/request/q/2/id/"+id;
+	sendRequest(url);
+}
+
+</script>
