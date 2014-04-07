@@ -1,5 +1,4 @@
-<h2 class = "header">Даалгаварууд</h2>
-<span>Хичээл: <strong><a href = "<?php echo $this -> baseUrl()?>/topic/list/id/<?php echo $this -> lid; ?>"><?php echo $this -> lessonName; ?></a></strong></span>
+<h2 class = "header"><?php echo $this -> lessonName; ?></h2>
 <hr/>
 
 <nav class="navbar navbar-default">
@@ -7,9 +6,9 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
       <ul class="nav navbar-nav navbar-right" style="border-left:1px solid #E7E7E7">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class = "fa fa-cogs fa-2x"></i></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class = "fa fa-cogs  fa-2x"></i></a>
           <ul class="dropdown-menu">
-            <li><a href="javascript:add()"><i class = "glyphicon glyphicon-plus"></i> Даалгавар нэмэх</a></li>
+            <li><a href="javascript:add()"><i class = "glyphicon glyphicon-plus"></i> Сэдэв нэмэх</a></li>
           </ul>
         </li>
       </ul>
@@ -27,9 +26,9 @@ foreach ($this -> list as $key => $value) { ?>
         <p><?php echo $value -> description; ?></p>
         <div class = "col-md-12 myrow" style="height: 25px;">
 	        <ul class="list-inline pull-right">
-	        	<li><a class = "delete-link" href="<?php echo $this -> baseUrl() ?>/task/delete/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
-	        	<li><a href="<?php echo $this -> baseUrl() ?>/task/edit/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-edit"></i> Засварлах</a></li>
-	        	<li><a href="<?php echo $this -> baseUrl() ?>/task/view/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-share-alt"></i> Дэлгэрэнгүй</a></li>
+	        	<li><a class = "delete-link" href="<?php echo $this -> baseUrl() ?>/topic/delete/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
+	        	<li><a href="<?php echo $this -> baseUrl() ?>/topic/edit/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-edit"></i> Засварлах</a></li>
+	        	<li><a href="<?php echo $this -> baseUrl() ?>/topic/view/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-share-alt"></i> Дэлгэрэнгүй</a></li>
 	        </ul>
         </div>
       </div>
@@ -44,14 +43,14 @@ foreach ($this -> list as $key => $value) { ?>
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">Даалгавар нэмэх</h4>
+        <h4 class="modal-title">Сэдэв нэмэх</h4>
       </div>
       <div class="modal-body">
-        <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this -> baseUrl(); ?>/task/add/id/<?php echo $this -> lid;?>">
-        <dt id="name-label"><label for="name" class="required">Даалгаварын нэр:</label></dt>
+        <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this -> baseUrl(); ?>/topic/add/id/<?php echo $this -> lid;?>">
+        <dt id="name-label"><label for="name" class="required">Сэдэвийн нэр:</label></dt>
 <dd id="name-element">
 <input type="text" name="name" id="name" value="" class="form-control"></dd>
-<dt id="description-label"><label for="description" class="optional">Даалгаварын тодорхойлолт:</label></dt>
+<dt id="description-label"><label for="description" class="optional">Сэдвийн тодорхойлолт:</label></dt>
 <dd id="description-element">
 <textarea name="description" id="description" class="form-control summernote-small" rows="24" cols="80"></textarea></dd>
 </dd>

@@ -1,12 +1,13 @@
 <style type="text/css">
 	.z-clip-wrap{
-		position: relative; display: inline-block;
+		position: relative;
+		display : inline-block;
 	}
 </style>
 
 <h2 class = "header">Файлын жагсаалт</h2>
 <hr/>
-<table class="table table-striped" style="position: relative">
+<table class="table table-striped">
 	<thead>
 		<tr>
 			<th>#</th>
@@ -19,7 +20,7 @@
 		<?php
 		$i = ($this -> page - 1) * 20;
 		foreach ($this -> paginator as $file) { ?>
-			<tr id = "row<?php echo $file['id'] ?>">
+			<tr class = "myrow" id = "row<?php echo $file['id'] ?>">
 				<td><?php echo ++$i; ?></td>
 				<td><?php echo $file['name']; ?></td>
 				<td>
@@ -30,7 +31,7 @@
 					</span>
 				</td>
 				<td><a class="label label-default" href="<?php echo $this -> baseUrl() ?>/file/download/id/<?php echo $file['id'] ?>"><i class="glyphicon glyphicon-download"></i> Татах</a></td>
-				<td><a class="label label-danger" href="javascript:delete1('<?php echo $file['id'] ?>')"><i class="glyphicon glyphicon-trash"></i> Устгах</a></td>
+				<td><a class="label label-danger delete-link" id = "del<?php echo $file['id'] ?>" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i> Устгах</a></td>
 			</tr>
 		<?php } ?>
 	</tbody>
@@ -47,6 +48,7 @@
 function delete1(id) {
 	$(".quick-message").html('Ачаалж байна...');
 	$(".quick-message").slideDown();
+	$("#row" + id).addClass('danger');
 	$.ajax({
         type: "POST",
         url: baseUrl + "/file/delete/id/" + id,
@@ -55,6 +57,7 @@ function delete1(id) {
         processData: false,
         success: function(res) {
         	$('.quick-message').hide();
+        	$("#row" + id).removeClass('danger');
             $("#row" + id).hide('slow');
         },
         error: function() {
@@ -63,8 +66,38 @@ function delete1(id) {
     });
 }
 
+function visible(delid) {
+	$("#del"+delid).addClass('label-danger');
+	$("#del"+delid).removeClass('label-default');
+}
 
 $(document).ready(function() {
+	$('.delete-link').mouseenter(function() {
+		delid = $(this).attr('id').substr(3);
+		if ($(this).hasClass('done')) {
+		} else if ($(this).hasClass('click-me')) {
+			$(this).addClass('done');
+			$(this).removeClass('click-me');
+		} else {
+			$(this).addClass('click-me');
+		}
+	});
+
+	$('.myrow').mouseleave(function(event) {
+		id = $(this).attr('id');
+		if (id != undefined) {
+			id = id.substr(3);
+			$('#del' + id).removeClass('click-me');
+			$('#del' + id).removeClass('done');
+		}
+	});
+	
+	$('.delete-link').click(function() {
+		id = $(this).attr('id');
+		id = id.substr(3);
+		delete1(id);
+	});
+
 	$('.quick-message').hide();
 	$('.quick-message').removeClass('hide');
 
@@ -77,7 +110,7 @@ $(document).ready(function() {
 	});
 	function copied() {
 		if ($(".quick-message").is( ":hidden" )) {
-			msg = '<h3>Холбоосыг хуулсан.</h3><p>энд дарвар алга болох болно.</p>';
+			msg = '<h3>Холбоосыг хуулсан.</h3><p>Энд дарвал алга болно.</p>';
 			$(".quick-message").html(msg);
 		    $(".quick-message").slideDown();
 		    setTimeout(hide, 3000);

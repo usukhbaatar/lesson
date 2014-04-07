@@ -32,7 +32,7 @@ class UsersController extends Zend_Controller_Action {
 		if (Zend_Registry::get('role') == 'superadmin')
 			$this -> _redirect('users/list');
 		else
-			$this -> _redirect('auth/logout');
+			$this -> _redirect('index/invalid');
 	}
 
 	public function registerAction() {

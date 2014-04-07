@@ -31,26 +31,23 @@ class FileController extends Zend_Controller_Action {
 		$id = $this -> _request -> getParam('id');
 		$uid = NULL;
 		$uri = NULL;
-		$name = NULL;
 		$role = NULL;
 
 		foreach ($file -> fetchAll('id = ' . $id) as $key => $value) {
-			$name = $value -> uri;
 			$uid = $value -> uid;
-			$uri = $value -> uri . '.' . $value -> extention;
+			$uri = $value -> uri;
 		}
 
 		$model = new Model_DbTable_Users();
 		foreach ($model -> fetchAll('id = ' . $uid) as $key => $value) {
-			$role = $model -> role;
+			$role = $value -> role;
 		}
 
 		if ($role == 'users' && Zend_Registry::get('role') == 'users' && Zend_Registry::get('id') != $uid)
-			$this -> _redirect('auth/logout');
+			$this -> _redirect('index/invalid');
 
-		header('Content-Type: text/plain');
-		header('Content-Disposition: attachment; filename="' . $uri . '"');
-		readfile(APPLICATION_PATH . '/../public/files/' . $uri);
+		header('Content-Disposition: attachment; filename="' . substr($uri, 14) . '"');
+		readfile(APPLICATION_PATH . '/..' . $uri);
 		$this -> view -> layout() -> disableLayout();
 		$this -> _helper -> viewRenderer -> setNoRender(true);
 	}
@@ -76,11 +73,17 @@ class FileController extends Zend_Controller_Action {
 		if ($this -> getRequest() -> isXmlHttpRequest()) {
 			$id = $this -> _request -> getParam('id');
 			$file = new Model_DbTable_File();
+			$filename = NULL;
+			foreach ($file -> fetchAll('id = ' . $id) as $key => $value) {
+				$filename = $value -> uri;
+			}
+
 			if (Zend_Registry::get('role') == 'superadmin') {
 				$file -> delete('id = ' . $id);
 			} else {
 				$file -> delete('id = ' . $id . ' AND uid = ' . Zend_Registry::get('id'));
 			}
+			unlink(APPLICATION_PATH . '/..' . $filename);
 			echo Zend_Json::encode(array('status' => 1));
 		}
 		$this -> _redirect('file/list');
@@ -122,6 +125,35 @@ class FileController extends Zend_Controller_Action {
 		} else {
 			
 		}
+	}
+
+	public function showAction() {
+		$file = new Model_DbTable_File();
+		$id = $this -> _request -> getParam('id');
+		$uid = NULL;
+		$uri = NULL;
+		$role = NULL;
+		$name = NULL;
+
+		foreach ($file -> fetchAll('id = ' . $id) as $key => $value) {
+			$uid = $value -> uid;
+			$uri = $value -> uri;
+			$name = $value -> name;
+		}
+
+		$model = new Model_DbTable_Users();
+		foreach ($model -> fetchAll('id = ' . $uid) as $key => $value) {
+			$role = $value -> role;
+		}
+
+		if ($role == 'users' && Zend_Registry::get('role') == 'users' && Zend_Registry::get('id') != $uid)
+			$this -> _redirect('index/invalid');
+
+		header('Content-Disposition: attachment; filename="' . substr($uri, 14) . '"');
+		readfile(APPLICATION_PATH . '/..' . $uri);
+		$this -> view -> layout() -> disableLayout();
+		$this -> _helper -> viewRenderer -> setNoRender(true);
+
 	}
 
 }

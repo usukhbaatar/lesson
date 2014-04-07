@@ -26,8 +26,8 @@ class LessonController extends Zend_Controller_Action {
 				$name = $form -> getValue('name');
 				$order = count($model -> fetchAll('uid = ' . Zend_Registry::get('id')));
 				$description = $form -> getValue('description');
-				$id = $model -> insert(array('name' => $name, 'description' => $description, 'uid' => Zend_Registry::get('id'), 'order' => $order));
-				$this -> _redirect('lesson/view/id/' . $id);
+				$model -> insert(array('name' => $name, 'description' => $description, 'uid' => Zend_Registry::get('id'), 'order' => $order));
+				$this -> _redirect('lesson/list');
 			}
 		}
 
@@ -78,7 +78,7 @@ class LessonController extends Zend_Controller_Action {
 	public function deleteAction() {
 		$id = $this -> _request -> getParam('id');
 		$model = new Model_DbTable_Lesson();
-		$model -> delete('id = ' . $id . ' AND uid = ' . Zend_Registry('id'));
+		$model -> delete('id = ' . $id . ' AND uid = ' . Zend_Registry::get('id'));
 		$this -> _redirect('lesson/list');
 	}
 
@@ -87,8 +87,9 @@ class LessonController extends Zend_Controller_Action {
 		$model = new Model_DbTable_Lesson();
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
 			$this -> view -> name = $value -> name;
-			$this -> view -> description = $value -> description;
 		}
+		
+		
 	}
 
 	public function orderAction() {

@@ -1,6 +1,6 @@
 <?php
 
-class TaskController extends Zend_Controller_Action
+class TopicController extends Zend_Controller_Action
 {
 
     public function init()
@@ -15,25 +15,25 @@ class TaskController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        // action body
+        $this -> _redirect('auth/logout');
     }
 
     public function addAction() {
-        $form = new Form_Task();
+        $form = new Form_Topic();
 		$request = $this -> getRequest();
 		$id = $this -> _request -> getParam('id');
 		
 		if ($request -> isPost()) {
 			if ($form -> isValid($this -> _request -> getPost())) {
-				$model = new Model_DbTable_Task();
+				$model = new Model_DbTable_Topic();
 				$name = $form -> getValue('name');
 				$description = $form -> getValue('description');
 				$model -> insert(array('name' => $name, 'description' => $description, 'lid' => $id));
-				$this -> _redirect('task/list/id/' . $id);
+				$this -> _redirect('topic/list/id/' . $id);
 			}
 		}
 
-		$form -> setAction($this -> view -> baseUrl() . '/task/add/id/' . $id);
+		$form -> setAction($this -> view -> baseUrl() . '/topic/add/id/' . $id);
 		$this -> view -> form = $form;
 		
 		$model = new Model_DbTable_Lesson();
@@ -46,7 +46,7 @@ class TaskController extends Zend_Controller_Action
     public function listAction()
     {
         $id = $this -> _request -> getParam('id');
-        $model = new Model_DbTable_Task();
+        $model = new Model_DbTable_Topic();
 		$this -> view -> list = $model -> fetchAll('lid = ' . $id);
 		$model = new Model_DbTable_Lesson();
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
@@ -58,9 +58,9 @@ class TaskController extends Zend_Controller_Action
     public function editAction()
     {
         $id = $this -> _request -> getParam('id');
-		$form = new Form_Task();
+		$form = new Form_Topic();
 		$request = $this -> getRequest();
-		$model = new Model_DbTable_Task();
+		$model = new Model_DbTable_Topic();
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
 			$lid = $value -> lid;
 		}
@@ -70,7 +70,7 @@ class TaskController extends Zend_Controller_Action
 				$name = $form -> getValue('name');
 				$description = $form -> getValue('description');
 				$model -> update(array('name' => $name, 'description' => $description), 'id = ' . $id);
-				$this -> _redirect('task/list/id/' . $lid);
+				$this -> _redirect('topic/list/id/' . $lid);
 			}
 		}
 
@@ -79,7 +79,7 @@ class TaskController extends Zend_Controller_Action
 			$form -> getElement('description') -> setValue($value -> description);
 		}
 
-		$form -> setAction($this -> view -> baseUrl() . '/task/edit/id/' . $id);
+		$form -> setAction($this -> view -> baseUrl() . '/topic/edit/id/' . $id);
 		$this -> view -> form = $form;
 		
 		$model = new Model_DbTable_Lesson();
@@ -91,7 +91,7 @@ class TaskController extends Zend_Controller_Action
     public function deleteAction()
     {
         $id = $this -> _request -> getParam('id');
-		$model = new Model_DbTable_Task();
+		$model = new Model_DbTable_Topic();
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
 			$lid = $value -> lid;
 		}
@@ -100,10 +100,14 @@ class TaskController extends Zend_Controller_Action
 			$uid = $value -> uid;
 		}
 		
-		$model = new Model_DbTable_Task();
+		$model = new Model_DbTable_Topic();
 		$model -> delete('id = ' . $id . ' AND ' . $uid . ' = ' . Zend_Registry::get('id'));
-		$this -> _redirect('task/list/id/' . $lid);
+		$this -> _redirect('topic/list/id/' . $lid);
     }
+	
+	public function viewAction() {
+		
+	}
 
 
 }

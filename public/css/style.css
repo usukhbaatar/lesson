@@ -36,7 +36,11 @@ h2.header {
 	cursor: pointer;
 }
 
-.quick-message-content {
-	background-color: white;
-	text-align: center;
+.click-me{
+	margin-left: -80px;
+}
+@-moz-document url-prefix() {
+    .click-me{
+		margin-left: -120px;
+    }
 }

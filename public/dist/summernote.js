@@ -1269,7 +1269,6 @@
       var $imageInput = $dialog.find('.note-image-input'),
           $imageUrl = $dialog.find('.note-image-url'),
           $imageBtn = $dialog.find('.note-image-btn');
-
       $imageDialog.on('shown.bs.modal', function () {
         $imageInput.on('change', function () {
           fnInsertImages(this.files);
@@ -2086,6 +2085,7 @@
                      '</div>' +
                      '<div class="modal-body">' +
                        '<div class="row-fluid">' +
+                        '<div class="myContent"></div>' +
                          '<h5>' + lang.image.selectFromFiles + '</h5>' +
                          '<input class="note-image-input" type="file" name="files" accept="image/*" />' +
                          '<h5>' + lang.image.url + '</h5>' +

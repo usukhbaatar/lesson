@@ -12,8 +12,8 @@
 			$role = Zend_Registry :: get('role');
 			
 			if (!$this -> _acl -> isAllowed($role, $resource, $action)){
-				$request -> setControllerName('auth')
-						 -> setActionName('logout');
+				$request -> setControllerName('index')
+						 -> setActionName('invalid');
 			}
 		}
 	}

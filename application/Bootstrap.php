@@ -9,6 +9,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		if (Zend_Auth::getInstance() -> hasIdentity()) {
 			Zend_Registry::set('role', Zend_Auth::getInstance() -> getStorage() -> read() -> role);
 			Zend_Registry::set('id', Zend_Auth::getInstance() -> getStorage() -> read() -> id);
+			Zend_Registry::set('name', mb_substr(Zend_Auth::getInstance() -> getStorage() -> read() -> lname, 0, 1, 'utf8') . '. ' . Zend_Auth::getInstance() -> getStorage() -> read() -> fname);
 		} else {
 			Zend_Registry::set('role', 'guests');
 			Zend_Registry::set('id', 0);
