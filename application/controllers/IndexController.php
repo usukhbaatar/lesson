@@ -7,7 +7,14 @@ class IndexController extends Zend_Controller_Action {
 	}
 
 	public function indexAction() {
-
+		switch (Zend_Registry::get('role')) {
+			case 'guests':
+				$this -> _redirect('auth/login');
+				break;
+			default:
+				$this -> redirect('users/profile');
+				break;
+		}
 	}
 	
 	public function invalidAction() {

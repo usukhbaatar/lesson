@@ -41,7 +41,16 @@ class View_Helper_Menu extends Zend_View_Helper_Abstract {
 		$role = 'users';
 		$ret .= '<li class="'.$this -> getActive($role, 'users', 'profile').'"><a href="'.$this -> baseUrl.'/users/profile">Нүүр</a></li>';
 		$ret .= '<li class="'.$this -> getActive($role, 'teacher', 'list').'"><a href="'.$this -> baseUrl.'/teacher/list">Багш нар</a></li>';
-        $ret .= '<li class="'.$this -> getActive($role, 'student', 'lessons').'"><a href="'.$this -> baseUrl.'/lesson/list">Хичээлүүд</a></li>';
+        $ret .= '<li class="'.$this -> getActive($role, 'student', 'lessons').'"><a href="'.$this -> baseUrl.'/student/lessons">Хичээлүүд</a></li>';
+        return $ret;
+	}
+	
+	public function admins() {
+		$ret = NULL;
+		$role = 'admins';
+		$ret .= '<li class="'.$this -> getActive($role, 'users', 'profile').'"><a href="'.$this -> baseUrl.'/users/profile">Нүүр</a></li>';
+		$ret .= '<li class="'.$this -> getActive($role, 'lesson', 'list').'"><a href="'.$this -> baseUrl.'/lesson/list">Хичээлүүд</a></li>';
+		$ret .= '<li class="'.$this -> getActive($role, 'lesson', 'list').'"><a href="'.$this -> baseUrl.'/lesson/list">Ангиуд</a></li>';
         return $ret;
 	}
 	

@@ -1,0 +1,18 @@
+<h2 class = "header">Даалгавах нэмэх</h2>
+<span>Хичээл: <strong><a href = "<?php echo $this -> baseUrl()?>/lesson/view/id/<?php echo $this -> lid; ?>"><?php echo $this -> lessonName; ?></a></strong></span>
+<hr/>
+
+<?php
+
+echo $this -> errors;
+echo $this -> form;
+
+?>
+
+<script>
+
+$(document).ready(function(){
+	$("#name").focus();
+});
+
+</script>

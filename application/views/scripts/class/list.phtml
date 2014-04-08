@@ -1,0 +1,88 @@
+<h2 class = "header">Даалгаварууд</h2>
+<span>Хичээл: <strong><a href = "<?php echo $this -> baseUrl()?>/topic/list/id/<?php echo $this -> lid; ?>"><?php echo $this -> lessonName; ?></a></strong></span>
+<hr/>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+      <ul class="nav navbar-nav navbar-right" style="border-left:1px solid #E7E7E7">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class = "fa fa-cogs fa-2x"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="javascript:add()"><i class = "glyphicon glyphicon-plus"></i> Даалгавар нэмэх</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+<?php
+foreach ($this -> list as $key => $value) { ?>
+	<div class="row">
+      <div class="col-xs-12">
+        <h3><?php echo $value -> name; ?></h3>
+        <p><?php echo $value -> description; ?></p>
+        <div class = "col-md-12 myrow" style="height: 25px;">
+	        <ul class="list-inline pull-right">
+	        	<li><a class = "delete-link" href="<?php echo $this -> baseUrl() ?>/task/delete/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
+	        	<li><a href="<?php echo $this -> baseUrl() ?>/task/edit/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-edit"></i> Засварлах</a></li>
+	        	<li><a href="<?php echo $this -> baseUrl() ?>/task/view/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-share-alt"></i> Дэлгэрэнгүй</a></li>
+	        </ul>
+        </div>
+      </div>
+    </div>
+    <hr>
+	<?php
+}
+?>
+
+<div class="modal fade bs-example-modal-lg" id = "task-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Даалгавар нэмэх</h4>
+      </div>
+      <div class="modal-body">
+        <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this -> baseUrl(); ?>/task/add/id/<?php echo $this -> lid;?>">
+        <dt id="name-label"><label for="name" class="required">Даалгаварын нэр:</label></dt>
+<dd id="name-element">
+<input type="text" name="name" id="name" value="" class="form-control"></dd>
+<dt id="description-label"><label for="description" class="optional">Даалгаварын тодорхойлолт:</label></dt>
+<dd id="description-element">
+<textarea name="description" id="description" class="form-control summernote-small" rows="24" cols="80"></textarea></dd>
+</dd>
+
+      </div>
+      <div class="modal-footer">
+<input type="submit" name="submit" id="submit" value="Хадгалах" class="btn btn-default btn-primary">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+    function add() {
+        $("#task-add").modal('show');
+        $("#name").focus();
+    }
+    
+	$('.delete-link').mouseenter(function() {
+		if ($(this).hasClass('done')) {
+		} else if ($(this).hasClass('click-me')) {
+			$(this).addClass('done');
+			$(this).removeClass('click-me');
+		} else {
+			$(this).addClass('click-me');
+		}
+	});
+	
+	$('.myrow').mouseleave(function(event) {
+		$('.delete-link').removeClass('click-me');
+		$('.delete-link').removeClass('done');
+	});
+</script>
