@@ -1,6 +1,6 @@
 <?php
 
-$baseUrl = "http://localhost/lesson/public";
+$baseUrl = $this -> serverUrl() . $this -> baseUrl()."/public";
 $menu = new View_Helper_Menu($this -> baseUrl());
 
 ?>
@@ -47,7 +47,7 @@ $menu = new View_Helper_Menu($this -> baseUrl());
 	<script type='text/javascript' src="<?php echo $baseUrl ?>/js/jquery.min.js"></script>
 	<script type='text/javascript' src="<?php echo $baseUrl ?>/js/script.js"></script>
 	<script>
-		var baseUrl = "http://localhost/lesson";
+		var baseUrl = "<?php echo $this -> serverUrl() . $this -> baseUrl(); ?>";
 	</script>
 </head>
 
@@ -151,7 +151,7 @@ $menu = new View_Helper_Menu($this -> baseUrl());
 
 				<div class="row">
 					<div class="col-xs-12">
-						<?php echo $this -> layout() -> content; ?>
+						<?php echo $this -> layout() -> content; echo $this -> serverUrl() . $this -> baseUrl(); ?>
 					</div>
 				</div>
 				<hr />
