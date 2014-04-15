@@ -14,7 +14,7 @@ class Model_LibraryAcl extends Zend_Acl {
 		$this -> add(new Zend_Acl_Resource('index'));
 		$this -> add(new Zend_Acl_Resource('users'));
 		$this -> add(new Zend_Acl_Resource('error'));
-		$this -> add(new Zend_Acl_Resource('lesson'));
+		$this -> add(new Zend_Acl_Resource('lessons'));
 		$this -> add(new Zend_Acl_Resource('teacher'));
 
 		$this -> allow('guests', 'auth', array('login', 'forgot', 'reset', 'logout'));
@@ -28,7 +28,7 @@ class Model_LibraryAcl extends Zend_Acl {
 		$this -> allow('users', 'teacher', array('list', 'lessons', 'request'));
 		$this -> allow('users', 'file', array('upload', 'download', 'delete', 'list'));
 		
-		$this -> allow('admins', 'lesson', array('add', 'list', 'edit', 'delete', 'order', 'view', 'students', 'save', 'get'));
+		$this -> allow('admins', 'lessons', array('add', 'list', 'edit', 'delete', 'order', 'view', 'students', 'save', 'get'));
 		$this -> allow('admins', 'task', array('add', 'list', 'edit', 'delete', 'view'));
 		$this -> allow('admins', 'topic', array('add', 'list', 'edit', 'delete', 'view'));
 		$this -> allow('admins', 'class', array('add', 'list', 'edit', 'delete', 'view'));

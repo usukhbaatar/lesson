@@ -1,6 +1,6 @@
 <?php
 
-$baseUrl = "http://localhost/lesson/public";
+$baseUrl = $this -> serverUrl() . $this -> baseUrl() . "/public";
 $menu = new View_Helper_Menu($this -> baseUrl());
 
 ?>
@@ -35,8 +35,8 @@ $menu = new View_Helper_Menu($this -> baseUrl());
 
 	<style type="text/css">
 		body {
-			padding-top: 70px;
-			font-family: "Times new roman"
+			padding-top: 100px;
+			font-family: "Arial Narrow", Arial, sans-serif;
 		}
 		.wrap {
 			margin-left: 0;
@@ -47,7 +47,7 @@ $menu = new View_Helper_Menu($this -> baseUrl());
 	<script type='text/javascript' src="<?php echo $baseUrl ?>/js/jquery.min.js"></script>
 	<script type='text/javascript' src="<?php echo $baseUrl ?>/js/script.js"></script>
 	<script>
-		var baseUrl = "http://localhost/lesson";
+		var baseUrl = "<?php echo $this -> serverUrl() . $this -> baseUrl()?>/public";
 	</script>
 </head>
 

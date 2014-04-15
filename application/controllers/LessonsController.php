@@ -1,6 +1,6 @@
 <?php
 
-class LessonController extends Zend_Controller_Action {
+class LessonsController extends Zend_Controller_Action {
 
 	public function init() {
 		$this -> _helper -> ajaxContext -> addActionContext('get', 'json') -> initContext();
