@@ -1,9 +1,22 @@
 <?php
 
 class Form_Class extends Zend_Form {
-	public function __construct($option = null) {
-		parent :: __construct($option);
+	public function __construct($id) {
+		parent :: __construct(NULL);
 		$this -> setMethod('post');
+		
+		$lesson = new Zend_Form_Element_Select('lesson');
+		$lesson -> setLabel('Хичээл:')
+				-> setAttrib('class', 'form-control');
+		
+		$model = new Model_DbTable_Lesson();
+		foreach ($model -> fetchAll('uid = ' . Zend_Registry::get('id')) as $key => $value) {
+			$lesson -> addMultiOption($value -> id, $value -> name);
+		}
+		
+		if ($id != NULL) {
+			$lesson -> setValue($id);
+		}
 		
         $name = new Zend_Form_Element_Text('name');
         $name -> setLabel('Ангийн нэр:') 
@@ -39,6 +52,6 @@ class Form_Class extends Zend_Form {
         $submit -> setLabel('Хадгалах')
 				-> setAttrib('class', 'btn btn-default');
         
-        $this -> addElements(array($name, $descriptoin, $day, $hour, $minute, $submit));
+        $this -> addElements(array($lesson, $name, $descriptoin, $day, $hour, $minute, $submit));
 	}
 }

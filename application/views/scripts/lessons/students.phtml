@@ -68,7 +68,7 @@ var lid = <?php echo $this -> id;?>;
 function get() {
 	$.ajax({
 		type: "POST",
-		url: baseUrl + "/lesson/get/id/" + lid,
+		url: baseUrl + "/lessons/get/id/" + lid,
 		data: "format = json",
 		async: false,
 		success: function(res) {
@@ -76,13 +76,13 @@ function get() {
 			content = "";
 			content += '<ul class="list-inline pull-left">';
         	content += '<span style = "color: #2a6496">Оюутнууд: </span>';
-        	content += '<li><a class = "tt" data-toggle="tooltip" data-original-title="Судлах хүсэлт" href="'+baseUrl+'/lesson/students/id/'+lid+'/val/0">';
+        	content += '<li><a class = "tt" data-toggle="tooltip" data-original-title="Судлах хүсэлт" href="<?php echo $this -> baseUrl()?>/lessons/students/id/'+lid+'/val/0">';
         	content += '<i class="glyphicon glyphicon-globe"></i> ' + res.a;
         	content += '</a></li><li>';
-        	content += '<a class = "tt" data-toggle="tooltip" data-original-title="Судалж байгаа" href="'+baseUrl+'/lesson/students/id/'+lid+'/val/1">';
+        	content += '<a class = "tt" data-toggle="tooltip" data-original-title="Судалж байгаа" href="<?php echo $this -> baseUrl()?>/lessons/students/id/'+lid+'/val/1">';
         	content += '<i class="glyphicon glyphicon-ok"></i> ' +  res.b;
         	content += '</a></li><li>';
-        	content += '<a class = "tt" data-toggle="tooltip" data-original-title="Цуцалсан" href="'+baseUrl+'/lesson/students/id/'+lid+'/val/2">';
+        	content += '<a class = "tt" data-toggle="tooltip" data-original-title="Цуцалсан" href="<?php echo $this -> baseUrl()?>/lessons/students/id/'+lid+'/val/2">';
         	content += '<i class="glyphicon glyphicon-remove"></i> ' + res.c;
         	content += '</a></li></ul>';
         	$("#ftcon").html(content);
@@ -104,8 +104,7 @@ function sendRequest(id, url, val) {
 				if (val == 1) {
 					get();
 				} else {
-					
-					window.location.replace(baseUrl + '/lesson/list');
+					window.location.replace('<?php echo $this -> baseUrl()?>/lessons/list');
 				}
 			},
 			error: function() {
@@ -124,7 +123,7 @@ function sendRequest(id, url, val) {
 						get();
 					} else {
 						
-						window.location.replace(baseUrl + '/lesson/list');
+						window.location.replace('<?php echo $this -> baseUrl()?>/lessons/list');
 					}
 				},
 				error: function() {
@@ -136,32 +135,32 @@ function sendRequest(id, url, val) {
 }
 
 function remove(id) {
-	var url = baseUrl + "/lesson/save/val/1/q/0/id/"+id;
+	var url = baseUrl + "/lessons/save/val/1/q/0/id/"+id;
 	sendRequest(id, url, 1);
 }
 
 function accept(id) {
-	var url = baseUrl + "/lesson/save/val/1/q/1/id/"+id;
+	var url = baseUrl + "/lessons/save/val/1/q/1/id/"+id;
 	sendRequest(id, url, 1);
 }
 
 function cancel(id) {
-	var url = baseUrl + "/lesson/save/val/1/q/2/id/"+id;
+	var url = baseUrl + "/lessons/save/val/1/q/2/id/"+id;
 	sendRequest(id, url, 1);
 }
 
 function removeAll(id) {
-	var url = baseUrl + "/lesson/save/val/0/q/0/old/<?php echo $this -> val ?>/id/"+id;
+	var url = baseUrl + "/lessons/save/val/0/q/0/old/<?php echo $this -> val ?>/id/"+id;
 	sendRequest(id, url, 0);
 }
 
 function acceptAll(id) {
-	var url = baseUrl + "/lesson/save/val/0/q/1/old/<?php echo $this -> val ?>/id/"+id;
+	var url = baseUrl + "/lessons/save/val/0/q/1/old/<?php echo $this -> val ?>/id/"+id;
 	sendRequest(id, url, 0);
 }
 
 function cancelAll(id) {
-	var url = baseUrl + "/lesson/save/val/0/q/2/old/<?php echo $this -> val ?>/id/"+id;
+	var url = baseUrl + "/lessons/save/val/0/q/2/old/<?php echo $this -> val ?>/id/"+id;
 	sendRequest(id, url, 0);
 }
 

@@ -22,11 +22,13 @@ class Form_Login extends Zend_Form
 				  -> setDescription('<a href = "'. $fc -> getBaseUrl(). '/auth/forgot">Нууц үгээ мартсан</a>');
 		$password->getDecorator('Description')->setEscape(false);
 		
+		$redirect = new Zend_Form_Element_Hidden('redirect');
+		
         $submit = new Zend_Form_Element_Submit('submit');
         $submit -> setLabel('Нэвтрэх')
 				-> setAttrib('class', 'btn btn-default');
         
-        $this -> addElements(array($username, $password, $submit));
+        $this -> addElements(array($username, $password, $redirect, $submit));
 		
 	}
 }

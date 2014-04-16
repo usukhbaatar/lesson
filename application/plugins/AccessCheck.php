@@ -12,8 +12,14 @@
 			$role = Zend_Registry :: get('role');
 			
 			if (!$this -> _acl -> isAllowed($role, $resource, $action)){
-				$request -> setControllerName('index')
-						 -> setActionName('invalid');
+				if (Zend_Registry::get('role') == 'guests') {
+					$request -> setControllerName('auth')
+						 	 -> setActionName('login')
+							 -> setParam('id', '1');
+				} else {
+					$request -> setControllerName('index')
+							 -> setActionName('invalid');
+				}
 			}
 		}
 	}

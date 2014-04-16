@@ -16,7 +16,8 @@ class ClassController extends Zend_Controller_Action {
 	}
 
 	public function addAction() {
-		$form = new Form_Class();
+		$id = $this -> _request -> getParam('id');
+		$form = new Form_Class($this -> _request -> getParam('id'));
 		$request = $this -> getRequest();
 		$id = $this -> _request -> getParam('id');
 
@@ -28,23 +29,18 @@ class ClassController extends Zend_Controller_Action {
 				$day = $form -> getValidValue('day');
 				$hour = $form -> getValue('hour');
 				$minute = $form -> getValue('hour');
+				$id = $form -> getValue('lesson');
 				$model -> insert(array('name' => $name, 'description' => $description, 'lid' => $id, 'day' => $day, 'hour' => $hour, 'minute' => $minute));
-				$this -> _redirect('class/list/id/' . $id);
+				$this -> _redirect('class/list');
 			}
 		}
 
 		$form -> setAction($this -> view -> baseUrl() . '/class/add/id/' . $id);
 		$this -> view -> form = $form;
-
-		$model = new Model_DbTable_Lesson();
-		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
-			$this -> view -> lid = $id;
-			$this -> view -> lessonName = $value -> name;
-		}
 	}
 
 	public function listAction() {
-		$model = new Model_DbTable_Task();
+		$model = new Model_DbTable_Class();
 		$this -> view -> list = $model -> fetchAll($model -> select() -> order('status') -> order('lid') -> order('day') -> order('hour'));
 
 		$model = new Model_DbTable_Lesson();

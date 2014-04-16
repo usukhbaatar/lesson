@@ -19,6 +19,9 @@ $(document).ready(function(){
 	} else {
 		$("#username").focus();
 	}
+	
+	if (document.URL != baseUrl + '/auth/login')
+		$("#redirect").val(document.URL);
 });
 
 </script>

@@ -26,6 +26,7 @@ class TeacherController extends Zend_Controller_Action {
 		$model = new Model_DbTable_Users();
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
 			$this -> view -> teacher = mb_substr($value -> lname, 0, 1, 'utf8') . '. ' . $value -> fname;
+			$this -> view -> tid = $value -> id;
 		}
 		
 		$model = new Model_DbTable_Lesson();

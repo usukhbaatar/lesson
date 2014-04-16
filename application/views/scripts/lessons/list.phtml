@@ -33,25 +33,25 @@ foreach ($this -> list as $key => $value) {
         <p><?php echo $value -> description; ?></p>
         <div class = "col-md-12 myrow" style="height: 25px;">
 	        <ul class="list-inline pull-right">
-	        	<li><a class = "delete-link" href="<?php echo $this -> baseUrl() ?>/lesson/delete/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
-	        	<li><a href="<?php echo $this -> baseUrl() ?>/lesson/edit/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-edit"></i> Засварлах</a></li>
+	        	<li><a class = "delete-link" href="<?php echo $this -> baseUrl() ?>/lessons/delete/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
+	        	<li><a href="<?php echo $this -> baseUrl() ?>/lessons/edit/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-edit"></i> Засварлах</a></li>
 	        	<li><a href="<?php echo $this -> baseUrl() ?>/task/list/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-tasks"></i> Даалгаварууд</a></li>
 	        	<li><a href="<?php echo $this -> baseUrl() ?>/topic/list/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-share-alt"></i> Дэлгэрэнгүй</a></li>
 	        </ul>
 	        
 	        <ul class="list-inline pull-left">
 	        	<span style = "color: #2a6496">Оюутнууд: </span>
-	        	<li><a class = "tt" data-toggle="tooltip" data-original-title="Судлах хүсэлт" href="<?php echo $this -> baseUrl() ?>/lesson/students/id/<?php echo $value -> id ?>/val/0">
+	        	<li><a class = "tt" data-toggle="tooltip" data-original-title="Судлах хүсэлт" href="<?php echo $this -> baseUrl() ?>/lessons/students/id/<?php echo $value -> id ?>/val/0">
 	        			<i class="glyphicon glyphicon-globe"></i> <?php echo $a ?>
 	        		</a>
 	        	</li>
 	        	<li>
-	        		<a class = "tt" data-toggle="tooltip" data-original-title="Судалж байгаа" href="<?php echo $this -> baseUrl() ?>/lesson/students/id/<?php echo $value -> id ?>/val/1">
+	        		<a class = "tt" data-toggle="tooltip" data-original-title="Судалж байгаа" href="<?php echo $this -> baseUrl() ?>/lessons/students/id/<?php echo $value -> id ?>/val/1">
 	        			<i class="glyphicon glyphicon-ok"></i> <?php echo $b ?>
 	        		</a>
 	        	</li>
 	        	<li>
-	        		<a class = "tt" data-toggle="tooltip" data-original-title="Цуцалсан" href="<?php echo $this -> baseUrl() ?>/lesson/students/id/<?php echo $value -> id ?>/val/2">
+	        		<a class = "tt" data-toggle="tooltip" data-original-title="Цуцалсан" href="<?php echo $this -> baseUrl() ?>/lessons/students/id/<?php echo $value -> id ?>/val/2">
 	        			<i class="glyphicon glyphicon-remove"></i> <?php echo $c ?>
 	        		</a>
 	        	</li>
@@ -72,7 +72,7 @@ foreach ($this -> list as $key => $value) {
         <h4 class="modal-title">Хичээл нэмэх</h4>
       </div>
       <div class="modal-body">
-        <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this -> baseUrl(); ?>/lesson/add">
+        <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this -> baseUrl(); ?>/lessons/add">
         <dt id="name-label"><label for="name" class="required">Хичээлийн нэр:</label></dt>
 <dd id="name-element">
 <input type="text" name="name" id="name" value="" class="form-control"></dd>

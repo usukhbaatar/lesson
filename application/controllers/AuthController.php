@@ -71,7 +71,11 @@ class AuthController extends Zend_Controller_Action {
 
 						Zend_Auth::getInstance() -> clearIdentity();
 					} else {
-						$this -> _redirect('users/profile');
+						$redirect = $form -> getValue('redirect');
+						if ($redirect == "")
+							$this -> _redirect('users/profile');
+						else 
+							$this -> redirect($redirect);
 					}
 				} else {
 					$this -> view -> errors = '<div class="alert alert-warning alert-dismissable">
