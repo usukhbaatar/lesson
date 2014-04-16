@@ -56,6 +56,7 @@ class ClassController extends Zend_Controller_Action {
 		$form = new Form_Task();
 		$request = $this -> getRequest();
 		$model = new Model_DbTable_Task();
+		
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
 			$lid = $value -> lid;
 		}
@@ -73,6 +74,7 @@ class ClassController extends Zend_Controller_Action {
 		}
 
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
+			$form -> getElement('lesson') -> setValue($value -> lid);
 			$form -> getElement('name') -> setValue($value -> name);
 			$form -> getElement('description') -> setValue($value -> description);
 			$form -> getElement('day') -> setValue($value -> day);
@@ -95,7 +97,7 @@ class ClassController extends Zend_Controller_Action {
 			foreach ($model -> fetchAll('id = ' . $lid) as $key => $value) {
 				$uid = $value -> uid;
 			}
-	
+
 			$model = new Model_DbTable_Task();
 			$model -> delete('id = ' . $id . ' AND ' . $uid . ' = ' . Zend_Registry::get('id'));
 			$this -> _redirect('class/list/id/' . $lid);
@@ -109,7 +111,7 @@ class ClassController extends Zend_Controller_Action {
 			foreach ($model -> fetchAll('id = ' . $lid) as $key => $value) {
 				$uid = $value -> uid;
 			}
-	
+
 			$model = new Model_DbTable_Task();
 			$model -> update(array('status' => 1), 'id = ' . $id . ' AND ' . $uid . ' = ' . Zend_Registry::get('id'));
 			$this -> _redirect('class/list/id/' . $lid);
