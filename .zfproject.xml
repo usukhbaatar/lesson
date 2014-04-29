@@ -124,9 +124,13 @@
           <actionMethod actionName="index"/>
           <actionMethod actionName="lessons"/>
           <actionMethod actionName="tasks"/>
+          <actionMethod actionName="topics"/>
+          <actionMethod actionName="task"/>
+          <actionMethod actionName="topic"/>
         </controllerFile>
         <controllerFile controllerName="Class">
           <actionMethod actionName="index"/>
+          <actionMethod actionName="deletestudent"/>
         </controllerFile>
       </controllersDirectory>
       <layoutsDirectory enabled="false"/>
@@ -379,6 +383,18 @@
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Class">
             <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Student">
+            <viewScriptFile forActionName="topics"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Class">
+            <viewScriptFile forActionName="deletestudent"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Student">
+            <viewScriptFile forActionName="task"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Student">
+            <viewScriptFile forActionName="topic"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>

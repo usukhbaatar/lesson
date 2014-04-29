@@ -1,7 +1,7 @@
 <?php
 
 class Form_Class extends Zend_Form {
-	public function __construct($id) {
+	public function __construct($id = NULL) {
 		parent :: __construct(NULL);
 		$this -> setMethod('post');
 		
@@ -17,16 +17,6 @@ class Form_Class extends Zend_Form {
 		if ($id != NULL) {
 			$lesson -> setValue($id);
 		}
-		
-        $name = new Zend_Form_Element_Text('name');
-        $name -> setLabel('Ангийн нэр:') 
-        	  -> addFilters(array('StringTrim', 'StripTags'))
-    		  -> setRequired(TRUE) -> addErrorMessage('Уучлаарай ангийн нэр хоосон байж болохгүй!')
-			  -> setAttrib('class', 'form-control');
-		
-		$descriptoin = new Zend_Form_Element_Textarea('description');
-		$descriptoin -> setLabel('Ангийн тодорхойлолт:')
-			  		 -> setAttrib('class', 'form-control summernote-small');
 		
 		$day = new Zend_Form_Element_Select('day');
 		$day -> setLabel('Өдөр:') -> setAttrib('class', 'form-control');
@@ -52,6 +42,6 @@ class Form_Class extends Zend_Form {
         $submit -> setLabel('Хадгалах')
 				-> setAttrib('class', 'btn btn-default');
         
-        $this -> addElements(array($lesson, $name, $descriptoin, $day, $hour, $minute, $submit));
+        $this -> addElements(array($lesson, $day, $hour, $minute, $submit));
 	}
 }

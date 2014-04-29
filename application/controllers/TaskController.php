@@ -1,76 +1,85 @@
 <?php
 
-class TaskController extends Zend_Controller_Action
-{
+class TaskController extends Zend_Controller_Action {
 
-    public function init()
-    {
-        $this -> _helper -> ajaxContext -> addActionContext('save', 'json') -> initContext();
+	public function init() {
+		$this -> _helper -> ajaxContext -> addActionContext('save', 'json') -> initContext();
 
-        if ($this -> getRequest() -> isXmlHttpRequest()) {
-            $this -> _helper -> layout -> disableLayout();
-            $this -> _helper -> viewRenderer -> setNoRender(true);
-        }
-    }
+		if ($this -> getRequest() -> isXmlHttpRequest()) {
+			$this -> _helper -> layout -> disableLayout();
+			$this -> _helper -> viewRenderer -> setNoRender(true);
+		}
+	}
 
-    public function indexAction()
-    {
-        // action body
-    }
+	public function indexAction() {
+		// action body
+	}
 
-    public function addAction() {
-        $form = new Form_Task();
+	public function addAction() {
+		$form = new Form_Task();
 		$request = $this -> getRequest();
 		$id = $this -> _request -> getParam('id');
+		$model = new Model_DbTable_Lesson();
+		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
+			$uid = $value -> uid;
+		}
 		
-		if ($request -> isPost()) {
-			if ($form -> isValid($this -> _request -> getPost())) {
-				$model = new Model_DbTable_Task();
-				$name = $form -> getValue('name');
-				$description = $form -> getValue('description');
-				$model -> insert(array('name' => $name, 'description' => $description, 'lid' => $id));
-				$this -> _redirect('task/list/id/' . $id);
+		if (Zend_Registry::get('id') == $uid) {
+			if ($request -> isPost()) {
+				if ($form -> isValid($this -> _request -> getPost())) {
+					$model = new Model_DbTable_Task();
+					$name = $form -> getValue('name');
+					$description = $form -> getValue('description');
+					$model -> insert(array('name' => $name, 'description' => $description, 'lid' => $id));
+					$this -> _redirect('task/list/id/' . $id);
+				}
 			}
 		}
 
 		$form -> setAction($this -> view -> baseUrl() . '/task/add/id/' . $id);
 		$this -> view -> form = $form;
-		
+
 		$model = new Model_DbTable_Lesson();
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
 			$this -> view -> lid = $id;
 			$this -> view -> lessonName = $value -> name;
 		}
-    }
+	}
 
-    public function listAction()
-    {
-        $id = $this -> _request -> getParam('id');
-        $model = new Model_DbTable_Task();
+	public function listAction() {
+		$id = $this -> _request -> getParam('id');
+		$model = new Model_DbTable_Task();
 		$this -> view -> list = $model -> fetchAll('lid = ' . $id);
 		$model = new Model_DbTable_Lesson();
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
 			$this -> view -> lid = $id;
 			$this -> view -> lessonName = $value -> name;
 		}
-    }
+	}
 
-    public function editAction()
-    {
-        $id = $this -> _request -> getParam('id');
+	public function editAction() {
+		$id = $this -> _request -> getParam('id');
 		$form = new Form_Task();
 		$request = $this -> getRequest();
 		$model = new Model_DbTable_Task();
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
+			$this -> view -> lid = $value -> lid;
 			$lid = $value -> lid;
 		}
 		
-		if ($request -> isPost()) {
-			if ($form -> isValid($this -> _request -> getPost())) {
-				$name = $form -> getValue('name');
-				$description = $form -> getValue('description');
-				$model -> update(array('name' => $name, 'description' => $description), 'id = ' . $id);
-				$this -> _redirect('task/list/id/' . $lid);
+		$model1 = new Model_DbTable_Lesson();
+		foreach ($model1 -> fetchAll('id = ' . $lid) as $key => $value) {
+			$uid = $value -> uid;
+		}
+		
+		if (Zend_Registry::get('id') == $uid) {
+			if ($request -> isPost()) {
+				if ($form -> isValid($this -> _request -> getPost())) {
+					$name = $form -> getValue('name');
+					$description = $form -> getValue('description');
+					$model -> update(array('name' => $name, 'description' => $description), 'id = ' . $id);
+					$this -> _redirect('task/list/id/' . $lid);
+				}
 			}
 		}
 
@@ -81,16 +90,15 @@ class TaskController extends Zend_Controller_Action
 
 		$form -> setAction($this -> view -> baseUrl() . '/task/edit/id/' . $id);
 		$this -> view -> form = $form;
-		
+
 		$model = new Model_DbTable_Lesson();
 		foreach ($model -> fetchAll('id = ' . $lid) as $key => $value) {
 			$this -> view -> lessonName = $value -> name;
 		}
-    }
+	}
 
-    public function deleteAction()
-    {
-        $id = $this -> _request -> getParam('id');
+	public function deleteAction() {
+		$id = $this -> _request -> getParam('id');
 		$model = new Model_DbTable_Task();
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
 			$lid = $value -> lid;
@@ -99,11 +107,161 @@ class TaskController extends Zend_Controller_Action
 		foreach ($model -> fetchAll('id = ' . $lid) as $key => $value) {
 			$uid = $value -> uid;
 		}
-		
+
 		$model = new Model_DbTable_Task();
 		$model -> delete('id = ' . $id . ' AND ' . $uid . ' = ' . Zend_Registry::get('id'));
 		$this -> _redirect('task/list/id/' . $lid);
+	}
+	
+	public function viewAction() {
+		$id = $this -> _request -> getParam('id');
+		$model = new Model_DbTable_Task();
+		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
+			$this -> view -> taskName = $value -> name;
+			$this -> view -> tid = $id;
+		}
+		$model = new Model_DbTable_Content();
+		$result = $model -> fetchAll($model -> select() -> where('tid = ' . $id . ' AND category = \'task\'') -> order('order') -> order('id'));
+		$this -> view -> list = $result;
+		
+		$model = new Model_DbTable_File();
+		$result = $model -> fetchAll($model -> select() -> where('tid = ' . $id . ' AND category =\'task\''));
+		$this -> view -> files = $result;
+		$this -> view -> e = $this -> _request -> getParam('e');
+	}
+	
+	public function addcontentAction() {
+		$request = $this -> _request;
+		if ($request -> isXmlHttpRequest()) {
+			$id = $this -> _request -> getParam('id');
+			$data = $this -> _request -> getPost();
+			$tid = $data['tid'];
+			$model = new Model_DbTable_Task();
+			foreach ($model -> fetchAll('id = ' . $tid) as $key => $value) {
+				$model1 = new Model_DbTable_Lesson();
+				foreach ($model1 -> fetchAll('id = ' . $value -> lid) as $key1 => $value1) {
+					$uid = $value1 -> uid;
+				}
+			}
+			
+			if (Zend_Registry::get('id') == $uid) {
+				$model = new Model_DbTable_Content();
+				if ($id == 0) {
+					$id = $model -> insert($data);
+					$res = $model -> fetchAll($model -> select() -> where('tid = ' . $tid . ' AND category = \'task\'') -> order('order DESC') -> limit(1));
+					foreach ($res as $key => $value) {
+						$model -> update(array('order' => $value -> order + 1), 'id = ' . $id);
+					}
+				} else {
+					$model -> update($data, 'id = ' . $id);
+				}
+			}
+			echo Zend_Json::encode(array('statys' => 1));
+		}
+	}
+	
+	public function deletecontentAction() {
+		$request = $this -> _request;
+		if ($request -> isXmlHttpRequest()) {
+			$id = $this -> _request -> getParam('id');
+			$model = new Model_DbTable_Content();
+			foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
+				$tid = $value -> tid;
+			}
+			$model = new Model_DbTable_Task();
+			foreach ($model -> fetchAll('id = ' . $tid) as $key => $value) {
+				$lid = $value -> lid;
+			}
+			$model = new Model_DbTable_Lesson();
+			foreach ($model -> fetchAll('id = ' . $lid) as $key => $value) {
+				$uid = $value -> uid;
+			}
+			if ($uid == Zend_Registry::get('id')) {
+				$model = new Model_DbTable_Content();
+				$model -> delete('id = ' . $id);
+				echo Zend_Json::encode(array('statys' => 1));
+			}
+		}
+	}
+	
+	public function getcontentAction() {
+		$request = $this -> _request;
+		if ($request -> isXmlHttpRequest()) {
+			$id = $this -> _request -> getParam('id');
+			$model = new Model_DbTable_Content();
+			$res = $model -> fetchAll('id = ' . $id);
+			echo Zend_Json::encode($res);
+		}
+	}
+	
+	public function getcontentsAction() {
+		$request = $this -> _request;
+		if ($request -> isXmlHttpRequest()) {
+			$id = $this -> _request -> getParam('id');
+			$model = new Model_DbTable_Content();
+			$res = $model -> fetchAll($model -> select() -> from($model, array('id', 'title')) -> where('tid = ' . $id . ' AND category = \'task\'') -> order('order') -> order('id'));
+			echo Zend_Json::encode($res);
+		}
+	}
+	
+	public function saveImage($source, $gid, $ex) {
+        $image=file_get_contents($source);		
+		$dir=APPLICATION_PATH.'/../public/files/'.md5($gid.'imagesSIT-f').'.'.$ex;
+		file_put_contents($dir, $image);
+		$data=array(
+			'uri' => '/public/files/' .md5($gid.'imagesSIT-f') .'.'. $ex
+		);
+		return $data;
     }
+	
+	public function addfileAction() {
+		$form = new Form_FileForm();
+        $request= $this -> getRequest();
+		$idd = $this -> _request -> getParam('id');
+		$model = new Model_DbTable_Task();
+		foreach ($model -> fetchAll('id = ' . $idd) as $key => $value) {
+			$model1 = new Model_DbTable_Lesson();
+			foreach ($model1 -> fetchAll('id = ' . $value -> lid) as $key1 => $value1) {
+				$uid = $value1 -> uid;
+			}
+		}
+		
+        if ($request -> isPost() && Zend_Registry::get('id') == $uid){
+        	if ($form->isValid($this -> _request -> getPost())){
+        		if ($form->file->isUploaded() && $form->file->receive()){
+        			$file = new Model_DbTable_File();
+					echo $form -> getElement('file') -> getFileName();
+					$extention = pathinfo($form -> getElement('file') -> getFileName(), PATHINFO_EXTENSION);
+        			$data = array(
+						'uri' => "asfdf",
+						'name' => $this -> _request -> getParam('name'),
+						'extention' => $extention,
+						'uid' => Zend_Registry::get('id'),
+						'category' => 'task',
+						'tid' => $idd
+					);
+        			$id = $file->insert($data);
+        			$data = $this->saveImage($form->file->getFileName(), $id, $extention);
+        			$where['id = ?']= $id;
+        			$file->update($data, $where);
+        			$this->_redirect('task/view/id/' . $idd);
+        		}
+        	}
+        }
+		$this->_redirect('task/view/id/' . $idd . '/e/1');
+	}
+
+	public function saveorderAction() {
+		$id = $this -> _request -> getParam('id');
+		$ids = ($this -> _request -> getParam('ids'));
+		$model = new Model_DbTable_Content();
+		$order = 0;
+		foreach ($ids as $value) {
+			$model -> update(array('order' => $order++), 'id = ' . $value);
+		}
+		
+		echo Zend_Json::encode(array('status' => 1));
+	}
 
 
 }

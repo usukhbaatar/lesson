@@ -10,10 +10,11 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>#</th>
+			<th style="width:40px;">#</th>
 			<th>Нэр</th>
-			<th>URI</th>
-			<th colspan="2"></th>
+			<th style="width:40px;"></th>
+			<th style="width:40px;">URI</th>
+			<th style="width:40px;"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -21,8 +22,9 @@
 		$i = ($this -> page - 1) * 20;
 		foreach ($this -> paginator as $file) { ?>
 			<tr class = "myrow" id = "row<?php echo $file['id'] ?>">
-				<td><?php echo ++$i; ?></td>
+				<td><?php echo ++$i; ?>.</td>
 				<td><?php echo $file['name']; ?></td>
+				<td><a class="label label-danger delete-link" id = "del<?php echo $file['id'] ?>" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i> Устгах</a></td>
 				<td>
 					<span class="z-clip-wrap">
 						<a class="label label-primary copy-button" id="<?php echo $file['uri'] ?>" href="javascript:void(0)">
@@ -31,16 +33,15 @@
 					</span>
 				</td>
 				<td><a class="label label-default" href="<?php echo $this -> baseUrl() ?>/file/download/id/<?php echo $file['id'] ?>"><i class="glyphicon glyphicon-download"></i> Татах</a></td>
-				<td><a class="label label-danger delete-link" id = "del<?php echo $file['id'] ?>" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i> Устгах</a></td>
 			</tr>
 		<?php } ?>
 	</tbody>
 </table>
 
-<!-- Small modal -->
 
 <div class = "quick-message">Ачаалж байна...</div>
 
+<hr/>
 <script src="<?php echo $this -> baseUrl(); ?>/public/plugins/zclip/jquery.zclip.min.js"></script>
 
 <script>

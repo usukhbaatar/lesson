@@ -1,0 +1,213 @@
+<?php
+
+function replace($str, $c, $f) {
+	return str_replace($c, $f, $str);
+}
+function fix($str) {
+	if (strlen($str) == 1) $str = "0" . $str;
+	return $str;
+}
+
+$date = array('Даваа', 'Мягмар', 'Лхагва', 'Дүрэв', 'Баасан', 'Бямба', 'Ням');
+?>
+
+<h2 class = "header"><?php echo $this -> lessonName; ?></h2>
+<span><strong>Цаг: </strong><?php echo $date[$this -> day] . ' (' . fix($this -> hour) . ':'. fix($this -> minute) . ')'; ?></span>
+<hr/>
+
+<?php
+
+if ($this -> e == 1) {
+	echo '<div class="alert alert-warning alert-dismissable">
+		  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+		  <strong>Уучлаарай.</strong> Таны файлыг хадгалж чадсангүй. Магадгүй таны файлын төрөл буруу байж болох юм.</div>';
+}
+
+?>
+<div class="bs-example bs-example-tabs">
+    <ul id="myTab" class="nav nav-tabs">
+      <li class="active"><a href="#home" data-toggle="tab"><i class = "fa fa-users"></i> Оюутнууд</a></li>
+      <!--<li><a href="#profile" data-toggle="tab"></a></li>-->
+      <li class="dropdown pull-right">
+      	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class = "fa fa-cogs"></i></a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+          <li><a href="javascript:workAdd()"><i class = "glyphicon glyphicon-pencil"></i> Даалгавар өгөх</a></li>
+        </ul>
+      </li>
+    </ul>
+    
+    <div id="myTabContent" class="tab-content">
+      <div class="tab-pane fade in active" id="home">
+      	<br />
+      	<table class="table table-striped">
+			<thead>
+				<tr>
+					<th style="width:40px;">#</th>
+					<th>Овог нэр</th>
+					<th style="width:40px;"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$i = 0;
+				foreach ($this -> learners as $value) { ?>
+					<tr class = "myrow" id = "row<?php echo $value['id'] ?>">
+						<td><?php echo ++$i; ?>.</td>
+						<td><?php echo mb_substr($value['lname'], 0, 1, 'utf8') . '. ' . $value['fname'] ?></td>
+						<td><a class="label label-danger delete-link" id = "del<?php echo $value['id'] ?>" href="<?php echo $this -> baseUrl() ?>/class/deletestudent/cid/<?php echo $this -> cid ?>/uid/<?php echo $value['id'] ?>"><i class="glyphicon glyphicon-trash"></i> Хасах</a></td>
+					</tr>
+				<?php } ?>
+			</tbody>
+		</table>
+      </div>
+      <!--<div class="tab-pane fade" id="profile">
+      </div> -->
+    </div>
+</div>
+
+
+
+<!-- Modals -->
+
+<div class="modal fade bs-example-modal-lg" id = "work-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title modal-title-content">Даалгавар өгөх</h4></div>
+      <div class="modal-body">
+        <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this -> baseUrl(); ?>/task/add/id/<?php echo $this -> lid;?>">
+
+        <dt id="name-label"><label for="task" class="required">Даалгавараа сонгоно уу:</label></dt>
+		<dd id="name-element">
+		<select type="text" name="task" id="task" value="" class="form-control"></select>
+		</dd>
+		
+		<dt id="name-label"><label for="task" class="required">Эхлэх:</label></dt>
+		<dd id="name-element">
+		<div class='input-group date' id='datetimepicker1'>
+            <input type='text' class="form-control" id = "start" value="<?php echo date('Y-m-d H:i')?>"/>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+		</dd>
+		
+		<dt id="name-label"><label for="task" class="required">Дуусах:</label></dt>
+		<dd id="name-element">
+		<div class='input-group date' id='datetimepicker2'>
+			<?php
+			$date = new DateTime(date('Y-m-d H:i'));
+			$date->add(new DateInterval('P0Y0M7DT0H0M0S'));
+			?>
+            <input type='text' class="form-control" id = "end" value="<?php echo $date->format('Y-m-d H:i') . "\n"; ?>"/>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+		</dd>
+		
+      </div>
+      <div class="modal-footer">
+		<input type="button" name="submit" id="submit-work" value="Нэмэх" class="btn btn-default btn-primary">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<hr/>
+
+
+<div class = "quick-message">Ачаалж байна...</div>
+<link rel="stylesheet" href="<?php echo $this -> baseUrl() ?>/public/datetimepicker/css/bootstrap-datetimepicker.min.css" />
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+<script src = "<?php echo $this -> baseUrl() ?>/public/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+
+<script type="text/javascript">
+    var cid = <?php echo $this -> cid ?>;
+    
+    function workAdd() {
+    	$.ajax({
+			type: "POST",
+			url: baseUrl + "/class/gettasks/cid/" + cid,
+			data: "format = json",
+			async: false,
+			success: function(res) {
+				$("#task").html(res);
+				$("#work-add").modal('show');
+			},
+			error: function() {
+				alert("Уучлаарай ямар нэг алдаа гарлаа.");
+			}
+		});
+    }
+    	
+	$(document).ready(function() {
+		$("#submit-work").click(function() {
+			alert(1);
+			tid = $("#task").val();
+			start = $("#start").val();
+			end = $("#end").val();
+			$.ajax({
+		        type: "POST",
+		        dataType: 'json',
+		        data: {cid:cid, tid:tid, start:start, end:end},
+		        url: baseUrl + "/class/taskadd",
+		        success: function(res) {
+		        	$("#work-add").modal('hide');
+		        	location.reload();
+		        },
+		        error: function() {
+					alert('Уучлаарай ямар нэг алдаа гарлаа.');
+		        }
+		    });
+		});
+		
+		$('.delete-link').mouseenter(function() {
+			delid = $(this).attr('id').substr(3);
+			if ($(this).hasClass('done')) {
+			} else if ($(this).hasClass('click-me')) {
+				$(this).addClass('done');
+				$(this).removeClass('click-me');
+			} else {
+				$(this).addClass('click-me');
+			}
+		});
+		
+		$(function () {
+        	$('#datetimepicker1').datetimepicker();
+        });
+	    $(function () {
+            $('#datetimepicker2').datetimepicker();
+        });
+	
+		$('.myrow').mouseleave(function(event) {
+			id = $(this).attr('id');
+			if (id != undefined) {
+				id = id.substr(3);
+				$('#del' + id).removeClass('click-me');
+				$('#del' + id).removeClass('done');
+			}
+		});
+		
+		$('.delete-link').click(function() {
+			id = $(this).attr('id');
+			id = id.substr(3);
+			delete1(id);
+		});
+	
+		$('.quick-message').hide();
+		$('.quick-message').removeClass('hide');
+	
+		function hide() {
+			$( ".quick-message" ).hide();
+		}
+	
+		$('.quick-message').click(function() {
+			$(this).hide();
+		});
+		
+	});
+    
+</script>

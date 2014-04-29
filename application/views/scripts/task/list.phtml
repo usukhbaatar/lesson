@@ -1,29 +1,27 @@
-<h2 class = "header">Даалгаварууд</h2>
+<h2 class = "header">Даалгаврууд</h2>
 <span>Хичээл: <strong><a href = "<?php echo $this -> baseUrl()?>/topic/list/id/<?php echo $this -> lid; ?>"><?php echo $this -> lessonName; ?></a></strong></span>
 <hr/>
 
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-      <ul class="nav navbar-nav navbar-right" style="border-left:1px solid #E7E7E7">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class = "fa fa-cogs fa-2x"></i></a>
+
+<div class="bs-example bs-example-tabs">
+	<ul id="myTab" class="nav nav-tabs">
+	  <li class="dropdown pull-right">
+	  	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class = "fa fa-cogs"></i></a>
           <ul class="dropdown-menu">
             <li><a href="javascript:add()"><i class = "glyphicon glyphicon-plus"></i> Даалгавар нэмэх</a></li>
+            <li><a href="<?php echo $this -> baseUrl()?>/topic/add/id/<?php echo $this -> lid?>"><i class = "glyphicon glyphicon-plus-sign"></i> Сэдэв нэмэх</a></li>
+            <li><a href="<?php echo $this -> baseUrl()?>/topic/list/id/<?php echo $this -> lid?>"><i class = "glyphicon glyphicon-list"></i> Сэдвүүд</a></li>
           </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
+	  </li>
+	</ul>
+</div>
 
 
 <?php
 foreach ($this -> list as $key => $value) { ?>
 	<div class="row">
       <div class="col-xs-12">
-        <h3><?php echo $value -> name; ?></h3>
+        <h3><a class = "subheader" href="<?php echo $this -> baseUrl()?>/task/view/id/<?php echo $value -> id ?>"><?php echo $value -> name; ?></a></h3>
         <p><?php echo $value -> description; ?></p>
         <div class = "col-md-12 myrow" style="height: 25px;">
 	        <ul class="list-inline pull-right">
@@ -48,10 +46,10 @@ foreach ($this -> list as $key => $value) { ?>
       </div>
       <div class="modal-body">
         <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this -> baseUrl(); ?>/task/add/id/<?php echo $this -> lid;?>">
-        <dt id="name-label"><label for="name" class="required">Даалгаварын нэр:</label></dt>
+        <dt id="name-label"><label for="name" class="required">Даалгаврын нэр:</label></dt>
 <dd id="name-element">
 <input type="text" name="name" id="name" value="" class="form-control"></dd>
-<dt id="description-label"><label for="description" class="optional">Даалгаварын тодорхойлолт:</label></dt>
+<dt id="description-label"><label for="description" class="optional">Даалгаврын тодорхойлолт:</label></dt>
 <dd id="description-element">
 <textarea name="description" id="description" class="form-control summernote-small" rows="24" cols="80"></textarea></dd>
 </dd>

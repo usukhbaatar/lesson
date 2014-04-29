@@ -1,4 +1,27 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>Student</b> and script/action name <b>tasks</b></p>
-</div>
+<h2 class = "header"><?php echo $this -> lessonName; ?></h2>
+<hr/>
+
+<?php if ( !$this -> ok) { ?>
+	<div class="alert alert-warning alert-dismissable">
+  		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+		<strong>Уучлаарай.</strong> Та энэ даалгаврыг үзэх эрхгүй байна. Багштайгаа холбогдно уу.
+	</div>
+<?php } else { ?>
+<?php
+foreach ($this -> list as $key => $value) { ?>
+	<div class="row">
+      <div class="col-xs-12">
+        <h3><a class = "subheader" href="<?php echo $this -> baseUrl()?>/student/task/id/<?php echo $value -> id ?>"><?php echo $value -> name; ?></a></h3>
+        <p><?php echo $value -> description; ?></p>
+        <div class = "col-md-12 myrow" style="height: 25px;">
+	        <ul class="list-inline pull-right">
+	        	<li><a href="<?php echo $this -> baseUrl() ?>/student/task/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-share-alt"></i> Дэлгэрэнгүй</a></li>
+	        </ul>
+        </div>
+      </div>
+    </div>
+    <hr>
+	<?php
+}
+}
+?>

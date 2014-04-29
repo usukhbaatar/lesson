@@ -1,87 +1,540 @@
-<h2 class = "header"><?php echo $this -> lessonName; ?></h2>
-<hr/>
-
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-      <ul class="nav navbar-nav navbar-right" style="border-left:1px solid #E7E7E7">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class = "glyphicon glyphicon-wrench"></i></a>
-          <ul class="dropdown-menu">
-            <li><a href="javascript:add()"><i class = "glyphicon glyphicon-plus"></i> Сэдэв нэмэх</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-
-
 <?php
-foreach ($this -> list as $key => $value) { ?>
-	<div class="row">
-      <div class="col-xs-12">
-        <h3><?php echo $value -> name; ?></h3>
-        <p><?php echo $value -> description; ?></p>
-        <div class = "col-md-12 myrow" style="height: 25px;">
-	        <ul class="list-inline pull-right">
-	        	<li><a class = "delete-link" href="<?php echo $this -> baseUrl() ?>/topic/delete/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
-	        	<li><a href="<?php echo $this -> baseUrl() ?>/topic/edit/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-edit"></i> Засварлах</a></li>
-	        	<li><a href="<?php echo $this -> baseUrl() ?>/topic/view/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-share-alt"></i> Дэлгэрэнгүй</a></li>
-	        </ul>
-        </div>
-      </div>
-    </div>
-    <hr>
-	<?php
+
+function replace($str, $c, $f) {
+	return str_replace($c, $f, $str);
 }
 ?>
 
-<div class="modal fade bs-example-modal-lg" id = "task-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<h2 class = "header"><?php echo $this -> topicName; ?></h2>
+<hr/>
+
+<?php
+
+if ($this -> e == 1) {
+	echo '<div class="alert alert-warning alert-dismissable">
+		  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+		  <strong>Уучлаарай.</strong> Таны файлыг хадгалж чадсангүй. Магадгүй таны файлын төрөл буруу байж болох юм.</div>';
+}
+
+?>
+<div class="bs-example bs-example-tabs">
+    <ul id="myTab" class="nav nav-tabs">
+      <li class="active"><a href="#home" data-toggle="tab"><i class = "glyphicon glyphicon-flag"></i> Сэдэв</a></li>
+      <li><a href="#profile" data-toggle="tab"><i class = "glyphicon glyphicon-file"></i> Файлууд</a></li>
+      <li class="dropdown pull-right">
+      	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class = "fa fa-cogs"></i></a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+          <li>
+            	<a href="javascript:void(0)">
+            		<i class = "glyphicon glyphicon-plus"></i> Контент нэмэх <br/>
+        			<p class = "label label-default" onclick = "javascript:addContent(1, 1)"> 1/1 </p> &nbsp
+        			<p class = "label label-default" onclick = "javascript:addContent(1, 2)"> 1/2 </p> &nbsp
+        			<p class = "label label-default" onclick = "javascript:addContent(1, 3)"> 1/3 </p> &nbsp
+        			<p class = "label label-default" onclick = "javascript:addContent(2, 3)"> 2/3 </p>
+        		</a>
+        	</li>
+            <li class="divider"></li>
+            <li>
+            	<a href="javascript:void(0)">
+            		<i class = "glyphicon glyphicon-plus-sign"></i> Код нэмэх <br/>
+        			<p class = "label label-default" onclick = "javascript:addCode(1, 1)"> 1/1 </p> &nbsp
+        			<p class = "label label-default" onclick = "javascript:addCode(1, 2)"> 1/2 </p> &nbsp
+        			<p class = "label label-default" onclick = "javascript:addCode(1, 3)"> 1/3 </p> &nbsp
+        			<p class = "label label-default" onclick = "javascript:addCode(2, 3)"> 2/3 </p>
+        		</a>
+        	</li>
+        	<li class="divider"></li>
+        	<li>
+            	<a href="javascript:fileAdd()"><i class = "glyphicon glyphicon-file"></i> Файл нэмэх</a>
+        	</li>
+        	<li>
+            	<a href="javascript:order()"><i class = "glyphicon glyphicon-random"></i> Дарааллыг өөрчлөх</a>
+        	</li>
+        </ul>
+      </li>
+    </ul>
+    
+    <div id="myTabContent" class="tab-content">
+      <div class="tab-pane fade in active" id="home">
+      	<br />
+		<?php foreach ($this -> list as $key => $value) {
+			$class = 'col-xs-' . $value -> size;
+			if ($value -> iscode == 0) {
+		 ?>
+		<div class="<?php echo $class ?>" id = "content<?php echo $value -> id?>">
+			<div class="portlet white">
+				<div class="portlet-title">
+					<div class="caption"><?php echo $value -> title ?></div>
+					<div class="actions">
+						<div class="btn-group">
+							<a data-toggle="dropdown" href="#">
+							<i class="glyphicon glyphicon-chevron-down"></i>
+							</a>
+							<ul class="dropdown-menu pull-right">
+								<li id = "li<?php echo $value -> id ?>"><a id = "del<?php echo $value -> id?>" class = "delete-confirm" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
+								<li><a href="javascript:editContent(<?php echo $value -> id?>)"><i class="glyphicon glyphicon-edit"></i> Засах</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="portlet-body">
+					<?php echo $value -> content; ?>
+				</div>
+			</div>
+		</div>
+		<?php } else { ?>
+		<div class="<?php echo $class ?>" id = "content<?php echo $value -> id?>">
+			<div class="portlet white">
+				<div class="portlet-title">
+					<div class="caption"><?php echo $value -> title ?></div>
+					<div class="actions">
+						<div class="btn-group">
+							<a data-toggle="dropdown" href="#">
+							<i class="glyphicon glyphicon-chevron-down"></i>
+							</a>
+							<ul class="dropdown-menu pull-right">
+								<li id = "li<?php echo $value -> id ?>"><a id = "del<?php echo $value -> id?>" class = "delete-confirm" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
+								<li><a href="javascript:editContent(<?php echo $value -> id?>)"><i class="glyphicon glyphicon-edit"></i> Засах</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="portlet-body">
+					<?php
+						$str = $value -> content;
+						$str = replace($str, "<", "&lt");
+						$str = replace($str, ">", "&gt");
+					?>
+					<pre class = "ace-editor" id = "ace<?php echo $value -> id ?>"><?php echo $str ?></pre>
+				</div>
+			</div>
+		</div>
+		<?php } } ?>
+
+      </div>
+      <div class="tab-pane fade" id="profile">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th style="width:40px;">#</th>
+					<th>Нэр</th>
+					<th style="width:40px;"></th>
+					<th style="width:40px;"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$i = 0;
+				foreach ($this -> files as $file) { ?>
+					<tr class = "myrow" id = "row<?php echo $file['id'] ?>">
+						<td><?php echo ++$i; ?>.</td>
+						<td><?php echo $file['name']; ?></td>
+						<td><a class="label label-danger delete-link" id = "del<?php echo $file['id'] ?>" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i> Устгах</a></td>
+						<td><a class="label label-default" href="<?php echo $this -> baseUrl() ?>/file/download/id/<?php echo $file['id'] ?>"><i class="glyphicon glyphicon-download"></i> Татах</a></td>
+					</tr>
+				<?php } ?>
+			</tbody>
+		</table>
+      </div>
+    </div>
+</div>
+
+<hr/>
+
+<!-- Modals -->
+
+<div class="modal fade bs-example-modal-lg" id = "content-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">Даалгавар нэмэх</h4>
-      </div>
+        <h4 class="modal-title modal-title-content">Контент нэмэх</h4></div>
       <div class="modal-body">
         <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this -> baseUrl(); ?>/topic/add/id/<?php echo $this -> lid;?>">
-        <dt id="name-label"><label for="name" class="required">Сэдэвийн нэр:</label></dt>
-<dd id="name-element">
-<input type="text" name="name" id="name" value="" class="form-control"></dd>
-<dt id="description-label"><label for="description" class="optional">Сэдвийн тодорхойлолт:</label></dt>
-<dd id="description-element">
-<textarea name="description" id="description" class="form-control summernote-small" rows="24" cols="80"></textarea></dd>
-</dd>
-
+        <dt id="name-label"><label for="name" class="required">Гарчиг:</label></dt>
+		<dd id="name-element">
+		<input type="text" name="name" id="name-content" value="" class="form-control"></dd>
+		<dt id="description-label"><label for="description" class="optional">Контент:</label></dt>
+		<dd id="description-element">
+		<textarea name="description" id="description" class="form-control summernote" rows="24" cols="80"></textarea></dd>
+		</dd>
       </div>
       <div class="modal-footer">
-<input type="submit" name="submit" id="submit" value="Хадгалах" class="btn btn-default btn-primary">
+		<input type="button" name="submit" id="submit-content" value="Нэмэх" class="btn btn-default btn-primary">
       </div>
       </form>
     </div>
   </div>
 </div>
 
+<div class="modal fade bs-example-modal-lg" id = "code-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title modal-title-code">Код нэмэх</h4></div>
+      <div class="modal-body">
+        <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this -> baseUrl(); ?>/topic/add/id/<?php echo $this -> lid;?>">
+        <dt id="name-label"><label for="name" class="required">Гарчиг:</label></dt>
+		<dd id="name-element">
+		<input type="text" name="name" id="name-code" value="" class="form-control"></dd>
+		<dt id="description-label"><label for="description" class="optional">Код:</label></dt>
+		<dd id="description-element">
+		<pre name="description" id="editor" class="form-control" rows="24" cols="80"></pre></dd>
+		</dd>
+      </div>
+      <div class="modal-footer">
+		<input type="button" name="submit" id="submit-code" value="Нэмэх" class="btn btn-default btn-primary">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bs-example-modal-lg" id = "file-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title modal-title-code">Файл нэмэх</h4></div>
+      <div class="modal-body">
+        <form enctype="multipart/form-data" method="post" action="<?php echo $this -> baseUrl(); ?>/topic/addfile/id/<?php echo $this -> tid;?>"><dl class="zend_form">
+        <dt id="name-label"><label for="name" class="required">Нэр:</label></dt>
+		<dd id="name-element">
+		<input type="text" name="name" id="name" value="" class="form-control"></dd>
+		<dt id="description-label"><label for="description" class="optional">Файл:</label></dt>
+		<dd id="description-element">
+		<input type="file" name = "file" id = "file" />
+		</dd>
+      </div>
+      <div class="modal-footer">
+		<input type="submit" name="submit" id="submit" value="Нэмэх" class="btn btn-default btn-primary">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bs-example-modal-lg" id = "sorting" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title modal-title-code">Файл нэмэх</h4></div>
+      <div class="modal-body">
+<ul id="sortable">
+</ul>      
+      </div>
+      <div class="modal-footer">
+		<input type="button" id = "sort" value="Хадгалах" onclick="save()" class="btn btn-default btn-primary">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<style>
+	#content-add .modal-dialog, #code-add .modal-dialog {
+	  width: 80%;
+	}
+	#editor { 
+        height: 300px;
+   	}
+   	.z-clip-wrap{
+		position: relative;
+		display : inline-block;
+	}
+	#sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+  	#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1em; height: 35px; border: solid 1px #AAA}
+</style>
+
+<div class = "quick-message">Ачаалж байна...</div>
+
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
 <script type="text/javascript">
-    function add() {
-        $("#task-add").modal('show');
-        $("#name").focus();
+
+	var view = [];
+	var ids = [];
+	var id = -1;
+    var X = 0, Y = 1;
+    var tid = <?php echo $this -> tid ?>;
+    var idd;
+    
+    $(function() {
+	    $( "#sortable" ).sortable();
+	    $( "#sortable" ).disableSelection();
+	});  
+    
+    function order() {
+    	$.ajax({
+	        type: "POST",
+	        dataType: 'json',
+	        url: baseUrl + "/topic/getcontents/id/" + tid,
+	        success: function(res) {
+	        	$("#sortable").html("");
+	        	for (i = 0; i < res.length; i++) {
+	        		$("#sortable").append('<li class="item" id = "item'+res[i]['id']+'"><a href="javascript:void(0)">' +(i+1)+". "+res[i]['title']+'</a></li>');
+	        	}
+	        	$("#sorting").modal('show');
+	        },
+	        error: function() {
+				alert('Уучлаарай ямар нэг алдаа гарлаа.');
+	        }
+	    });
     }
     
-	$('.delete-link').mouseenter(function() {
-		if ($(this).hasClass('done')) {
-		} else if ($(this).hasClass('click-me')) {
-			$(this).addClass('done');
-			$(this).removeClass('click-me');
-		} else {
-			$(this).addClass('click-me');
+    function save() {
+    	var sorted = [];
+    	$(".item").each(function() {
+			sorted.push($(this).attr('id').substr(4));
+		});
+		$.ajax({
+	        type: "POST",
+	        dataType: 'json',
+	        data: {ids:sorted},
+	        url: baseUrl + "/topic/saveorder/id/" + tid,
+	        success: function(res) {
+	        	$("#sorting").modal('hide');
+	        	location.reload();
+	        },
+	        error: function() {
+				alert('Уучлаарай ямар нэг алдаа гарлаа.');
+	        }
+	    });
+    }
+	
+	$(document).ready(function() {
+		$(".ace-editor").each(function() {
+			view.push(ace.edit($(this).attr('id')));
+			ids.push($(this).attr('id'));
+		});
+		
+		for (i = 0; i < view.length; i++) {
+			view[i].setTheme("ace/theme/crimson_editor");
+			view[i].getSession().setMode("ace/mode/c_cpp");
+			view[i].setReadOnly(true);
+			
+			var heightUpdateFunction = function(id) {
+		   		var newHeight =view[i].getSession().getScreenLength()
+		        	          * view[i].renderer.lineHeight
+		           		      + view[i].renderer.scrollBar.getWidth();
+		
+		        $('#' + id).height(newHeight.toString() + "px");
+		        view[i].resize();
+		    };
+		    heightUpdateFunction(ids[i]);
+		    view[i].getSession().on('change', heightUpdateFunction(ids[i]));
+		}
+		
+		$('.delete-link').mouseenter(function() {
+			delid = $(this).attr('id').substr(3);
+			if ($(this).hasClass('done')) {
+			} else if ($(this).hasClass('click-me')) {
+				$(this).addClass('done');
+				$(this).removeClass('click-me');
+			} else {
+				$(this).addClass('click-me');
+			}
+		});
+	
+		$('.myrow').mouseleave(function(event) {
+			id = $(this).attr('id');
+			if (id != undefined) {
+				id = id.substr(3);
+				$('#del' + id).removeClass('click-me');
+				$('#del' + id).removeClass('done');
+			}
+		});
+		
+		$('.delete-link').click(function() {
+			id = $(this).attr('id');
+			id = id.substr(3);
+			delete1(id);
+		});
+	
+		$('.quick-message').hide();
+		$('.quick-message').removeClass('hide');
+	
+		function hide() {
+			$( ".quick-message" ).hide();
+		}
+	
+		$('.quick-message').click(function() {
+			$(this).hide();
+		});
+		
+		function copied() {
+			if ($(".quick-message").is( ":hidden" )) {
+				msg = '<h3>Холбоосыг хуулсан.</h3><p>Энд дарвал алга болно.</p>';
+				$(".quick-message").html(msg);
+			    $(".quick-message").slideDown();
+			    setTimeout(hide, 3000);
+			}
 		}
 	});
 	
-	$('.myrow').mouseleave(function(event) {
-		$('.delete-link').removeClass('click-me');
-		$('.delete-link').removeClass('done');
-	});
+	function fileAdd() {
+		$("#name-file").val("");
+		$("#file-add").modal('show');
+	}
+    
+    function replaceAll(find, replace, str) {
+	  return str.replace(new RegExp(find, 'g'), replace);
+	}
+    
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/crimson_editor");
+    editor.getSession().setMode("ace/mode/c_cpp");
+    
+    
+    $("#submit-content").click(function() {
+    	size = 12 * X / Y;
+    	title = $("#name-content").val();
+    	content = $(".summernote").code();
+    	$.ajax({
+	        type: "POST",
+	        dataType: 'json',
+	        url: baseUrl + "/topic/addcontent/id/" + id,
+	        data: {tid: tid, category:'topic', title: title, content: content, size: size},
+	        success: function(res) {
+	        	$("#content-add").modal('hide');
+	        	location.reload();
+	        },
+	        error: function() {
+	        	$('.quick-message').hide();
+	        }
+	    });
+    });
+    
+    $("#submit-code").click(function() {
+    	size = 12 * X / Y;
+    	title = $("#name-code").val();
+    	content = editor.getSession().getValue();
+    	$.ajax({
+	        type: "POST",
+	        dataType: 'json',
+	        url: baseUrl + "/topic/addcontent/id/" + id,
+	        data: {tid: tid, category:'topic', title: title, content: content, size: size, iscode:1},
+	        success: function(res) {
+	        	$("#content-add").modal('hide');
+	        	location.reload();
+	        },
+	        error: function() {
+	        	$('.quick-message').hide();
+	        }
+	    });
+    });
+    
+    function addContent(x, y) {
+    	X = x; Y = y; id = 0;
+    	$("#submit-content").val('Хадгалах');
+    	$("modal-title-content").html('Контент нэмэх');
+    	$("#name").val("");
+        $(".summernote").code("");
+        $("#content-add").modal('show');
+        $("#name").focus();
+    }
+    
+    function addCode(x, y) {
+    	X = x; Y = y; id = 0;
+    	$("#submit-code").val('Хадгалах');
+    	$(".modal-title-code").html('Код нэмэх');
+    	$("#name").val("");
+        $("").code("");
+        $("#code-add").modal('show');
+        $("#name").focus();
+    }
+    
+    function editContent(idd) {
+    	id = idd;
+    	$.ajax({
+	        type: "POST",
+	        dataType: 'json',
+	        url: baseUrl + "/topic/getcontent/id/" + idd,
+	        success: function(res) {
+	        	res = res[0];
+	        	if (res['size'] == 12) {X = 1; Y = 1;} else
+	        	if (res['size'] == 8) {X = 3; Y = 4;} else
+	        	if (res['size'] == 6) {X = 1; Y = 2;} else
+	        	{X = 1; Y = 4;}
+        		if (res['iscode'] == 0) {
+        			$("#name-content").focus();
+        			$("#submit-content").val('Засварлах');
+        			$(".modal-title-content").html('Контент засварлах');
+        			$("#name-content").val(res['title']);
+        			$(".summernote").code(res['content']);
+        			$("#content-add").modal('show');
+        		} else {
+        			$("#name-code").focus();
+        			$("#submit-code").val('Засварлах');
+        			$(".modal-title-code").html('Код засварлах');
+        			$("#name-code").val(res['title']);
+        			editor.setValue(res['content'], 1);
+        			$("#code-add").modal('show');
+        		}
+	        },
+	        error: function() {
+				alert('Уучлаарай ямар нэг алдаа гарлаа.');
+	        }
+	    });
+    }
+    
+    $(".delete-confirm").click(function(e) {
+    	idd = $(this).attr('id').substr(3);
+    	html = '<div class = "confirm"><a class = "label label-danger" href = "javascript:confirmYes1('+idd+')"><i class = "glyphicon glyphicon-ok"></i> Тийм</a> &nbsp<a class = "label label-default" href = "javascript:confirmNo1('+idd+')"><i class = "glyphicon glyphicon-remove"></i> Үгүй</a></div>';
+    	$("#del" + idd).html(html);
+    	e.stopPropagation();
+    });
+    
+    function confirmYes1(idd) {
+    	$.ajax({
+	        type: "POST",
+	        dataType: 'json',
+	        url: baseUrl + "/topic/deletecontent/id/" + idd,
+	        success: function(res) {
+	        	$("#content" + idd).hide();
+	        },
+	        error: function() {
+				alert('Уучлаарай ямар нэг алдаа гарлаа.');
+	        }
+	    });
+    }
+    
+    function confirmNo1(idd) {
+    	html = '<i class="glyphicon glyphicon-trash"></i> Устгах';
+    	$("#del" + idd).html(html);
+    }
+    
+    
+    function delete1(id) {
+	$(".quick-message").html('Ачаалж байна...');
+	$(".quick-message").slideDown();
+	$("#row" + id).addClass('danger');
+	$.ajax({
+        type: "POST",
+        url: baseUrl + "/file/delete/id/" + id,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(res) {
+        	$('.quick-message').hide();
+        	$("#row" + id).removeClass('danger');
+            $("#row" + id).hide('slow');
+        },
+        error: function() {
+        	$('.quick-message').hide();
+        }
+    });
+}
+
+function visible(delid) {
+	$("#del"+delid).addClass('label-danger');
+	$("#del"+delid).removeClass('label-default');
+}
+
+    
 </script>

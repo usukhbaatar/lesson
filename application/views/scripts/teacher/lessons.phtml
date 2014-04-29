@@ -5,20 +5,20 @@
 foreach ($this -> list as $key => $value) {?>
 	<div class="row">
       <div class="col-xs-12">
-        <h3><?php echo $value -> name; ?></h3>
+        <h3><a class = "subheader" href="<?php echo $this -> baseUrl()?>/student/topics/id/<?php echo $value -> id ?>"><?php echo $value -> name; ?></a></h3>
         <p><?php echo $value -> description; ?></p>
         <ul class="list-inline pull-right">
-        	<li><a href = "<?php echo $this -> baseUrl() ?>/users/profile/id/<?php echo $value -> id; ?>"><i class="glyphicon glyphicon-share-alt"></i> Дэлгэрэнгүй</a></li>
+        	<li><a href = "<?php echo $this -> baseUrl() ?>/student/topics/id/<?php echo $value -> id; ?>"><i class="glyphicon glyphicon-share-alt"></i> Дэлгэрэнгүй</a></li>
         	<?php if ( isset($this -> req[$value -> id])) { 
 	    		if ($this -> req[$value -> id] == 2) { ?>
-					<li><a href="javascript:rerequest(<?php echo $value -> id ?>)"><i class="glyphicon glyphicon-send"></i> Дахин хүсэлт илгээх</a></li>
+					<li><a href="javascript:modal(<?php echo $value -> id ?>, 1)"><i class="glyphicon glyphicon-send"></i> Дахин хүсэлт илгээх</a></li>
 	        	<?php } else if($this -> req[$value -> id] == 1) { ?>
 					<li><a href="javascript:cancel(<?php echo $value -> id ?>)"><i class="glyphicon glyphicon-send"></i> Хичээлийг хаах</a></li>
 	        	<?php } else { ?>
 					<li><a href="javascript:cancel(<?php echo $value -> id ?>)"><i class="glyphicon glyphicon-send"></i> Хүсэлтийг цуцлах</a></li>
 	        	<?php } ?>
     		<?php } else { ?>
-				<li><a href="javascript:request(<?php echo $value -> id ?>)"><i class="glyphicon glyphicon-send"></i> Хүсэлт илгээх</a></li>
+				<li><a href="javascript:modal(<?php echo $value -> id ?>, 0)"><i class="glyphicon glyphicon-send"></i> Хүсэлт илгээх</a></li>
         <?php } ?>
         </ul>
       </div>
@@ -27,15 +27,48 @@ foreach ($this -> list as $key => $value) {?>
 	<?php
 }
 ?>
+
+<div class="modal fade bs-example-modal-lg" id = "send-request" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Ангиа сонгоно уу.</h4>
+      </div>
+      <div class="modal-body">
+        <form enctype="application/x-www-form-urlencoded" method="post" action="javascript:void(0)">
+        <dt id="class-label"><label for="class" class="required">Анги:</label></dt>
+		<dd id="class-element">
+			<select name="class" id="class" class="form-control">
+			    <option value="1">Програмчлалын хэл С</option>
+			    <option value="2">Test lesson</option>
+			</select>
+			<input type="hidden" id = "id" value="-1" />	
+		</dd>
+
+      </div>
+      <div class="modal-footer">
+		<input type="button" name="submit" id="submit" value="Хүсэлт илгээх" class="btn btn-default btn-primary" onclick="javascript:submit1()">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script>
+var kk = -1;
+var idd = -1;
+
 function sendRequest(url) {
 	$.ajax({
 		type: "POST",
 		url: url,
 		data: "format = json",
 		async: false,
-		success: function(res){
-			window.location.reload();
+		success: function(res) {
+			res = JSON.parse(res);
+			if (res.status == 0) alert('Уучлаарай энэ үйлдэл одоогоор боломжгүй байна.');
+			else window.location.reload();
 		},
 		error: function() {
 			alert("Уучлаарай ямар нэг алдаа гарлаа.");
@@ -43,19 +76,46 @@ function sendRequest(url) {
 	});
 }
 
+function modal(id, key) {
+	kk = key;
+	idd = id;
+	$.ajax({
+		type: "POST",
+		url: baseUrl + "/teacher/getclasses/id/" + id,
+		data: "format = json",
+		async: false,
+		success: function(res) {
+			$("#class").html(res);
+			$("#send-request").modal('show');
+		},
+		error: function() {
+			alert("Уучлаарай ямар нэг алдаа гарлаа.");
+		}
+	});
+}
+
+function submit1() {
+	if (kk == 0) {
+		request(idd, $("#class").val());
+	} else if (kk == 1) {
+		rerequest(idd, $("#class").val());
+	}
+}
+
 function cancel(id) {
 	var url = baseUrl + "/teacher/request/q/0/id/"+id;
 	sendRequest(url);
 }
 
-function request(id) {
-	var url = baseUrl + "/teacher/request/q/1/id/"+id;
+function request(id, c) {
+	var url = baseUrl + "/teacher/request/q/1/id/"+id + "/c/" + c;
 	sendRequest(url);
 }
 
-function rerequest(id) {
-	var url = baseUrl + "/teacher/request/q/2/id/"+id;
+function rerequest(id, c) {
+	var url = baseUrl + "/teacher/request/q/2/id/"+id+"/c/" + c;
 	sendRequest(url);
 }
+
 
 </script>

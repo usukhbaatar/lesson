@@ -59,30 +59,9 @@ class View_Helper_Menu extends Zend_View_Helper_Abstract {
 		$role = 'admins';
 		$ret .= '<li class="'.$this -> getActive($role, 'users', 'profile').'"><a href="'.$this -> baseUrl.'/users/profile">Нүүр</a></li>';
 		$ret .= '<li class="'.$this -> getActive($role, 'lessons', 'list').'"><a href="'.$this -> baseUrl.'/lessons/list">Хичээлүүд</a></li>';
+		$ret .= '<li class="'.$this -> getActive($role, 'class', 'list').'"><a href="'.$this -> baseUrl.'/class/list">Ангиуд</a></li>';
         $ret .= '<li class="'.$this -> getActive($role, 'file', 'list').'"><a href="'.$this -> baseUrl.'/file/list">Файл удирдах</a></li>';
         return $ret;
 	}
 	
 }
-
-/*<li><a href="#">Link</a></li>
-		            <li><a href="#">Link</a></li>
-		            <li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li>
-								<a href="#">Action</a>
-							</li>
-							<li>
-								<a href="#">Another action</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">Separated link</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">One more separated link</a>
-							</li>
-						</ul>
-					</li>';*/

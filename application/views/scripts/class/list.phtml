@@ -1,88 +1,161 @@
-<h2 class = "header">Даалгаварууд</h2>
-<span>Хичээл: <strong><a href = "<?php echo $this -> baseUrl()?>/topic/list/id/<?php echo $this -> lid; ?>"><?php echo $this -> lessonName; ?></a></strong></span>
+<h2 class = "header">
+	<?php echo $this -> val == 0 ? 'Идэвхитэй ангиуд' : 'Төгссөн ангиуд'; ?></h2>
 <hr/>
 
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-      <ul class="nav navbar-nav navbar-right" style="border-left:1px solid #E7E7E7">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class = "fa fa-cogs fa-2x"></i></a>
+<div class="bs-example bs-example-tabs">
+	<ul id="myTab" class="nav nav-tabs">
+	  <li class="dropdown pull-right">
+	  	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class = "fa fa-cogs"></i></a>
           <ul class="dropdown-menu">
-            <li><a href="javascript:add()"><i class = "glyphicon glyphicon-plus"></i> Даалгавар нэмэх</a></li>
+          	<?php if ($this -> val == 0) {
+          		echo '<li><a href="'. $this -> baseUrl() .'/class/list/val/1"><i class = "glyphicon glyphicon-list"></i> Төгссөн ангиуд</a></li>';
+          	} else {
+          		echo '<li><a href="'. $this -> baseUrl() .'/class/list"><i class = "glyphicon glyphicon-list"></i> Идэвхитэй ангиуд</a></li>';
+          	} ?>
+            <li><a href="<?php echo $this -> baseUrl() ?>/class/add"><i class = "glyphicon glyphicon-plus"></i> Анги нэмэх</a></li>
           </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+	  </li>
+	</ul>
+</div>
+<br/>
+<br/>
 
-
-
+<table class = "table table-striped table-condensed">
+	<tbody>
 <?php
-foreach ($this -> list as $key => $value) { ?>
-	<div class="row">
-      <div class="col-xs-12">
-        <h3><?php echo $value -> name; ?></h3>
-        <p><?php echo $value -> description; ?></p>
-        <div class = "col-md-12 myrow" style="height: 25px;">
-	        <ul class="list-inline pull-right">
-	        	<li><a class = "delete-link" href="<?php echo $this -> baseUrl() ?>/task/delete/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>
-	        	<li><a href="<?php echo $this -> baseUrl() ?>/task/edit/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-edit"></i> Засварлах</a></li>
-	        	<li><a href="<?php echo $this -> baseUrl() ?>/task/view/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-share-alt"></i> Дэлгэрэнгүй</a></li>
-	        </ul>
-        </div>
-      </div>
-    </div>
-    <hr>
+function fix($str) {
+	if (strlen($str) == 1) $str = "0" . $str;
+	return $str;
+}
+$data = "";
+$date = array('Даваа', 'Мягмар', 'Лхагва', 'Дүрэв', 'Баасан', 'Бямба', 'Ням');
+$first = TRUE;
+$prev = -1;
+if ($this -> val == 0) $str = "Ангийг хаах";
+else $str = 'Ангийг идэвхижүүлэх';
+
+
+foreach ($this -> list as $key => $value) {
+	if ($value -> lid != $prev) {
+		$i = 0;
+		if (!$first) {
+			echo '</tbody></table><table class = "table table-striped table-condensed"><tbody>';
+		}
+		$first = FALSE;
+		echo '<tr><th colspan = "6">' . $this -> lessons[$value -> lid]['name'] . '</th></tr>';
+		$prev = $value -> lid;
+	} ?>
+	<tr class = "myrow" id = "row<?php echo $value -> id ?>">
+		<td style="width: 40px; padding-left: 20px;"><?php echo ++$i; ?>.</td>
+		
+		<td><a href = "<?php echo $this -> baseUrl() ?>/class/view/id/<?php echo $value -> id ?>"><?php echo $date[$value -> day] . ' (' . fix($value -> hour) . ':'. fix($value -> minute) . ')'; ?></a></td>
+		
+		<td style="width: 20px;"><a class="label label-danger delete-link tt" data-toggle="tooltip" data-original-title="Устгах" id = "del<?php echo $value -> id ?>" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i> </a></td>
+		<td style="width: 20px;"><a class="label label-default tt" data-toggle="tooltip" data-original-title="Засварлах" href="<?php echo $this -> baseUrl()?>/class/edit/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-edit"></i> </a></td>
+		<td style="width: 20px;"><a class="label label-success edit-link tt" data-toggle="tooltip" data-original-title="<?php echo $str ?>" id = "bye<?php echo $value -> id ?>" href="javascript:void(0)"><i class="glyphicon glyphicon-share"></i> </a></td>
+		<td style="width: 20px;"><a class="label label-primary tt" data-toggle="tooltip" data-original-title="Дэлгэрэнгүй" href="<?php echo $this -> baseUrl()?>/class/view/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-share-alt"></i> </a></td>
+	</tr>
 	<?php
 }
 ?>
+</tbody> </table>
 
-<div class="modal fade bs-example-modal-lg" id = "task-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">Даалгавар нэмэх</h4>
-      </div>
-      <div class="modal-body">
-        <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this -> baseUrl(); ?>/task/add/id/<?php echo $this -> lid;?>">
-        <dt id="name-label"><label for="name" class="required">Даалгаварын нэр:</label></dt>
-<dd id="name-element">
-<input type="text" name="name" id="name" value="" class="form-control"></dd>
-<dt id="description-label"><label for="description" class="optional">Даалгаварын тодорхойлолт:</label></dt>
-<dd id="description-element">
-<textarea name="description" id="description" class="form-control summernote-small" rows="24" cols="80"></textarea></dd>
-</dd>
+<hr/>
+<div class = "quick-message">Ачаалж байна...</div>
 
-      </div>
-      <div class="modal-footer">
-<input type="submit" name="submit" id="submit" value="Хадгалах" class="btn btn-default btn-primary">
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
+<script>
 
-<script type="text/javascript">
-    function add() {
-        $("#task-add").modal('show');
-        $("#name").focus();
-    }
-    
+function delete1(id) {
+	$(".quick-message").html('Ачаалж байна...');
+	$(".quick-message").slideDown();
+	$("#row" + id).addClass('danger');
+	$.ajax({
+        type: "POST",
+        url: baseUrl + "/class/delete/id/" + id + "/thefor/delete",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(res) {
+        	$('.quick-message').hide();
+        	$("#row" + id).removeClass('danger');
+            $("#row" + id).hide('slow');
+        },
+        error: function() {
+        	$('.quick-message').hide();
+        }
+    });
+}
+
+function delete2(id) {
+	$(".quick-message").html('Ачаалж байна...');
+	$(".quick-message").slideDown();
+	$("#row" + id).addClass('danger');
+	$.ajax({
+        type: "POST",
+        url: baseUrl + "/class/delete/id/" + id + "/val/<?php echo (($this -> val + 1) % 2)?>",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(res) {
+        	$('.quick-message').hide();
+        	$("#row" + id).removeClass('danger');
+            $("#row" + id).hide('slow');
+        },
+        error: function() {
+        	$('.quick-message').hide();
+        }
+    });
+}
+
+function visible(delid) {
+	$("#del"+delid).addClass('label-danger');
+	$("#del"+delid).removeClass('label-default');
+}
+
+$(document).ready(function() {
 	$('.delete-link').mouseenter(function() {
+		delid = $(this).attr('id').substr(3);
 		if ($(this).hasClass('done')) {
-		} else if ($(this).hasClass('click-me')) {
+		} else if ($(this).hasClass('click-me-small')) {
 			$(this).addClass('done');
-			$(this).removeClass('click-me');
+			$(this).removeClass('click-me-small');
 		} else {
-			$(this).addClass('click-me');
+			$(this).addClass('click-me-small');
+		}
+	});
+
+	$('.myrow').mouseleave(function(event) {
+		id = $(this).attr('id');
+		if (id != undefined) {
+			id = id.substr(3);
+			$('#del' + id).removeClass('click-me-small');
+			$('#del' + id).removeClass('done');
 		}
 	});
 	
-	$('.myrow').mouseleave(function(event) {
-		$('.delete-link').removeClass('click-me');
-		$('.delete-link').removeClass('done');
+	$('.delete-link').click(function() {
+		id = $(this).attr('id');
+		id = id.substr(3);
+		delete1(id);
 	});
+	
+	$('.edit-link').click(function() {
+		id = $(this).attr('id');
+		id = id.substr(3);
+		delete2(id);
+	});
+
+	$('.quick-message').hide();
+	$('.quick-message').removeClass('hide');
+
+	function hide() {
+		$( ".quick-message" ).hide();
+	}
+
+	$('.quick-message').click(function() {
+		$(this).hide();
+	});
+});
+
+
 </script>

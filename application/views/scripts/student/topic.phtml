@@ -1,0 +1,145 @@
+<?php
+
+function replace($str, $c, $f) {
+	return str_replace($c, $f, $str);
+}
+?>
+
+<h2 class = "header"><?php echo $this -> topicName; ?></h2>
+<hr/>
+
+<?php if ( !$this -> ok) { ?>
+	<div class="alert alert-warning alert-dismissable">
+  		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+		<strong>Уучлаарай.</strong> Та энэ хичээлийг үзэх эрхгүй байна. Багштайгаа холбогдно уу.
+	</div>
+<?php } else { ?>
+
+<div class="bs-example bs-example-tabs">
+    <ul id="myTab" class="nav nav-tabs">
+      <li class="active"><a href="#home" data-toggle="tab"><i class = "glyphicon glyphicon-flag"></i> Сэдэв</a></li>
+      <li><a href="#profile" data-toggle="tab"><i class = "glyphicon glyphicon-file"></i> Файлууд</a></li>
+    </ul>
+    
+    <div id="myTabContent" class="tab-content">
+      <div class="tab-pane fade in active" id="home">
+      	<br />
+		<?php foreach ($this -> list as $key => $value) {
+			$class = 'col-xs-' . $value -> size;
+			if ($value -> iscode == 0) {
+		 ?>
+		<div class="<?php echo $class ?>" id = "content<?php echo $value -> id?>">
+			<div class="portlet white">
+				<div class="portlet-title">
+					<div class="caption"><?php echo $value -> title ?></div>
+				</div>
+				<div class="portlet-body">
+					<?php echo $value -> content; ?>
+				</div>
+			</div>
+		</div>
+		<?php } else { ?>
+		<div class="<?php echo $class ?>" id = "content<?php echo $value -> id?>">
+			<div class="portlet white">
+				<div class="portlet-title">
+					<div class="caption"><?php echo $value -> title ?></div>
+				</div>
+				<div class="portlet-body">
+					<?php
+						$str = $value -> content;
+						$str = replace($str, "<", "&lt");
+						$str = replace($str, ">", "&gt");
+					?>
+					<pre class = "ace-editor" id = "ace<?php echo $value -> id ?>"><?php echo $str ?></pre>
+				</div>
+			</div>
+		</div>
+		<?php } } ?>
+
+      </div>
+      <div class="tab-pane fade" id="profile">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th style="width:40px;">#</th>
+					<th>Нэр</th>
+					<th style="width:40px;"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$i = 0;
+				foreach ($this -> files as $file) { ?>
+					<tr class = "myrow" id = "row<?php echo $file['id'] ?>">
+						<td><?php echo ++$i; ?>.</td>
+						<td><?php echo $file['name']; ?></td>
+						<td><a class="label label-default" href="<?php echo $this -> baseUrl() ?>/file/download/id/<?php echo $file['id'] ?>"><i class="glyphicon glyphicon-download"></i> Татах</a></td>
+					</tr>
+				<?php } ?>
+			</tbody>
+		</table>
+      </div>
+    </div>
+</div>
+
+<hr/>
+
+<div class = "quick-message">Ачаалж байна...</div>
+
+<script type="text/javascript">
+
+	var view = [];
+	var ids = [];
+    
+	$(document).ready(function() {
+		$(".ace-editor").each(function() {
+			view.push(ace.edit($(this).attr('id')));
+			ids.push($(this).attr('id'));
+		});
+		
+		for (i = 0; i < view.length; i++) {
+			view[i].setTheme("ace/theme/crimson_editor");
+			view[i].getSession().setMode("ace/mode/c_cpp");
+			view[i].setReadOnly(true);
+			
+			var heightUpdateFunction = function(id) {
+		   		var newHeight =view[i].getSession().getScreenLength()
+		        	          * view[i].renderer.lineHeight
+		           		      + view[i].renderer.scrollBar.getWidth();
+		
+		        $('#' + id).height(newHeight.toString() + "px");
+		        view[i].resize();
+		    };
+		    heightUpdateFunction(ids[i]);
+		    view[i].getSession().on('change', heightUpdateFunction(ids[i]));
+		}
+		
+		
+	
+		$('.quick-message').hide();
+		$('.quick-message').removeClass('hide');
+	
+		function hide() {
+			$( ".quick-message" ).hide();
+		}
+	
+		$('.quick-message').click(function() {
+			$(this).hide();
+		});
+		
+		function copied() {
+			if ($(".quick-message").is( ":hidden" )) {
+				msg = '<h3>Холбоосыг хуулсан.</h3><p>Энд дарвал алга болно.</p>';
+				$(".quick-message").html(msg);
+			    $(".quick-message").slideDown();
+			    setTimeout(hide, 3000);
+			}
+		}
+	});
+    
+    function replaceAll(find, replace, str) {
+	  return str.replace(new RegExp(find, 'g'), replace);
+	}
+</script>
+
+<?php } ?>
