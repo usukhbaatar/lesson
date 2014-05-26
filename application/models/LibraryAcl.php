@@ -20,7 +20,7 @@ class Model_LibraryAcl extends Zend_Acl {
 
 		$this -> allow('guests', 'auth', array('login', 'forgot', 'reset', 'logout'));
 		$this -> allow('guests', 'error', 'error');
-		$this -> allow('guests', 'index', array('invalid', 'index'));
+		$this -> allow('guests', 'index', array('invalid'));
 		$this -> allow('guests', 'users', array('register', 'active'));
 
 		$this -> deny('users', 'auth', array('login'));
