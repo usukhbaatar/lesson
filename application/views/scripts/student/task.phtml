@@ -1,19 +1,12 @@
-<?php
-
-function replace($str, $c, $f) {
-	return str_replace($c, $f, $str);
-}
-?>
-
 <h2 class = "header"><?php echo $this -> taskName; ?></h2>
 <hr/>
 
-<?php if ( !$this -> ok) { ?>
+<?php if ( !$this -> ok) :?>
 	<div class="alert alert-warning alert-dismissable">
   		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 		<strong>Уучлаарай.</strong> Та энэ хичээлийг үзэх эрхгүй байна. Багштайгаа холбогдно уу.
 	</div>
-<?php } else { ?>
+<?php else: ?>
 
 <div class="bs-example bs-example-tabs">
     <ul id="myTab" class="nav nav-tabs">
@@ -34,7 +27,7 @@ function replace($str, $c, $f) {
 					<div class="caption"><?php echo $value -> title ?></div>
 				</div>
 				<div class="portlet-body">
-					<?php echo $value -> content; ?>
+					<?php echo base64_decode($value -> content); ?>
 				</div>
 			</div>
 		</div>
@@ -45,12 +38,7 @@ function replace($str, $c, $f) {
 					<div class="caption"><?php echo $value -> title ?></div>
 				</div>
 				<div class="portlet-body">
-					<?php
-						$str = $value -> content;
-						$str = replace($str, "<", "&lt");
-						$str = replace($str, ">", "&gt");
-					?>
-					<pre class = "ace-editor" id = "ace<?php echo $value -> id ?>"><?php echo $str ?></pre>
+					<pre class = "ace-editor" id = "ace<?php echo $value -> id ?>"><?php echo base64_decode($value -> content) ?></pre>
 				</div>
 			</div>
 		</div>
@@ -87,59 +75,52 @@ function replace($str, $c, $f) {
 <div class = "quick-message">Ачаалж байна...</div>
 
 <script type="text/javascript">
-
 	var view = [];
 	var ids = [];
-    
+
 	$(document).ready(function() {
 		$(".ace-editor").each(function() {
 			view.push(ace.edit($(this).attr('id')));
 			ids.push($(this).attr('id'));
 		});
-		
-		for (i = 0; i < view.length; i++) {
+
+		for ( i = 0; i < view.length; i++) {
 			view[i].setTheme("ace/theme/crimson_editor");
 			view[i].getSession().setMode("ace/mode/c_cpp");
 			view[i].setReadOnly(true);
-			
+
 			var heightUpdateFunction = function(id) {
-		   		var newHeight =view[i].getSession().getScreenLength()
-		        	          * view[i].renderer.lineHeight
-		           		      + view[i].renderer.scrollBar.getWidth();
-		
-		        $('#' + id).height(newHeight.toString() + "px");
-		        view[i].resize();
-		    };
-		    heightUpdateFunction(ids[i]);
-		    view[i].getSession().on('change', heightUpdateFunction(ids[i]));
+				var newHeight = view[i].getSession().getScreenLength() * view[i].renderer.lineHeight + view[i].renderer.scrollBar.getWidth();
+
+				$('#' + id).height(newHeight.toString() + "px");
+				view[i].resize();
+			};
+			heightUpdateFunction(ids[i]);
+			view[i].getSession().on('change', heightUpdateFunction(ids[i]));
 		}
-		
-		
-	
+
 		$('.quick-message').hide();
 		$('.quick-message').removeClass('hide');
-	
+
 		function hide() {
-			$( ".quick-message" ).hide();
+			$(".quick-message").hide();
 		}
-	
+
+
 		$('.quick-message').click(function() {
 			$(this).hide();
 		});
-		
+
 		function copied() {
-			if ($(".quick-message").is( ":hidden" )) {
+			if ($(".quick-message").is(":hidden")) {
 				msg = '<h3>Холбоосыг хуулсан.</h3><p>Энд дарвал алга болно.</p>';
 				$(".quick-message").html(msg);
-			    $(".quick-message").slideDown();
-			    setTimeout(hide, 3000);
+				$(".quick-message").slideDown();
+				setTimeout(hide, 3000);
 			}
 		}
-	});
-    
-    function replaceAll(find, replace, str) {
-	  return str.replace(new RegExp(find, 'g'), replace);
-	}
+
+	}); 
 </script>
 
-<?php } ?>
+<?php endif; ?>

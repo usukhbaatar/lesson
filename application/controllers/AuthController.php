@@ -18,7 +18,7 @@ class AuthController extends Zend_Controller_Action {
 
 	public function loginAction() {
 		if (Zend_Auth::getInstance() -> hasIdentity()) {
-			$this -> _redirect('users/profile');
+			$this -> _redirect('index/index');
 		}
 		$thefor = $this -> _request -> getParam('thefor');
 		$this -> view -> thefor = $thefor;
@@ -71,11 +71,7 @@ class AuthController extends Zend_Controller_Action {
 
 						Zend_Auth::getInstance() -> clearIdentity();
 					} else {
-						$redirect = $form -> getValue('redirect');
-						if ($redirect == "")
-							$this -> _redirect('users/profile');
-						else 
-							$this -> redirect($redirect);
+						$this -> _redirect('index/index');
 					}
 				} else {
 					$this -> view -> errors = '<div class="alert alert-warning alert-dismissable">
@@ -94,7 +90,7 @@ class AuthController extends Zend_Controller_Action {
 
 	public function logoutAction() {
 		Zend_Auth::getInstance() -> clearIdentity();
-		$this -> _redirect('auth/login');
+		$this -> _redirect('index/index');
 	}
 
 	public function forgotAction() {

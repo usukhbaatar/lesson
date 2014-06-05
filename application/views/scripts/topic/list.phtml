@@ -20,7 +20,7 @@ foreach ($this -> list as $key => $value) { ?>
 	<div class="row">
       <div class="col-xs-12">
         <h3><a class = "subheader" href="<?php echo $this -> baseUrl()?>/topic/view/id/<?php echo $value -> id ?>"><?php echo $value -> name; ?></a></h3>
-        <p><?php echo $value -> description; ?></p>
+        <p><?php echo base64_decode($value -> description); ?></p>
         <div class = "col-md-12 myrow" style="height: 25px;">
 	        <ul class="list-inline pull-right">
 	        	<li><a class = "delete-link" href="<?php echo $this -> baseUrl() ?>/topic/delete/id/<?php echo $value -> id ?>"><i class="glyphicon glyphicon-trash"></i> Устгах</a></li>

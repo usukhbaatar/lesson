@@ -26,11 +26,13 @@ class TopicController extends Zend_Controller_Action {
 		
 		if (Zend_Registry::get('id') == $uid) {
 			if ($request -> isPost()) {
+				
 				if ($form -> isValid($this -> _request -> getPost())) {
 					$model = new Model_DbTable_Topic();
 					$name = $form -> getValue('name');
-					$description = $form -> getValue('description');
-					$model -> insert(array('name' => $name, 'description' => $description, 'lid' => $id));
+					$description = base64_encode($form -> getValue('description'));
+					$format = $form -> getValue('format');
+					$model -> insert(array('name' => $name, 'description' => $description, 'lid' => $id, 'format' => $format));
 					$this -> _redirect('topic/list/id/' . $id);
 				}
 			}
@@ -76,7 +78,7 @@ class TopicController extends Zend_Controller_Action {
 			if ($request -> isPost()) {
 				if ($form -> isValid($this -> _request -> getPost())) {
 					$name = $form -> getValue('name');
-					$description = $form -> getValue('description');
+					$description = base64_encode($form -> getValue('description'));
 					$model -> update(array('name' => $name, 'description' => $description), 'id = ' . $id);
 					$this -> _redirect('topic/list/id/' . $lid);
 				}
@@ -85,7 +87,7 @@ class TopicController extends Zend_Controller_Action {
 
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
 			$form -> getElement('name') -> setValue($value -> name);
-			$form -> getElement('description') -> setValue($value -> description);
+			$form -> getElement('description') -> setValue(base64_decode($value -> description));
 		}
 
 		$form -> setAction($this -> view -> baseUrl() . '/topic/edit/id/' . $id);
@@ -190,6 +192,11 @@ class TopicController extends Zend_Controller_Action {
 			$id = $this -> _request -> getParam('id');
 			$model = new Model_DbTable_Content();
 			$res = $model -> fetchAll('id = ' . $id);
+			$i = 0;
+			foreach ($res as $key => $value) {
+				$res[$i]['content'] = base64_decode($value -> content);
+				$i++;
+			}
 			echo Zend_Json::encode($res);
 		}
 	}

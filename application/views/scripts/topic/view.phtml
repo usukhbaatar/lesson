@@ -1,5 +1,4 @@
 <?php
-
 function replace($str, $c, $f) {
 	return str_replace($c, $f, $str);
 }
@@ -78,7 +77,7 @@ if ($this -> e == 1) {
 					</div>
 				</div>
 				<div class="portlet-body">
-					<?php echo $value -> content; ?>
+					<?php echo base64_decode($value -> content); ?>
 				</div>
 			</div>
 		</div>
@@ -101,7 +100,7 @@ if ($this -> e == 1) {
 				</div>
 				<div class="portlet-body">
 					<?php
-						$str = $value -> content;
+						$str = base64_decode($value -> content);
 						$str = replace($str, "<", "&lt");
 						$str = replace($str, ">", "&gt");
 					?>
@@ -390,11 +389,15 @@ if ($this -> e == 1) {
     editor.setTheme("ace/theme/crimson_editor");
     editor.getSession().setMode("ace/mode/c_cpp");
     
+    function encode_utf8( s ) {
+    	return unescape( encodeURIComponent( s ) );
+    }
     
     $("#submit-content").click(function() {
     	size = 12 * X / Y;
     	title = $("#name-content").val();
-    	content = $(".summernote").code();
+    	content = btoa(encode_utf8($(".summernote").code()));
+    	alert(content);
     	$.ajax({
 	        type: "POST",
 	        dataType: 'json',
@@ -413,7 +416,7 @@ if ($this -> e == 1) {
     $("#submit-code").click(function() {
     	size = 12 * X / Y;
     	title = $("#name-code").val();
-    	content = editor.getSession().getValue();
+    	content = btoa(encode_utf8(editor.getSession().getValue()));
     	$.ajax({
 	        type: "POST",
 	        dataType: 'json',

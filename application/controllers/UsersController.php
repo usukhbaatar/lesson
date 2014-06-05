@@ -16,23 +16,20 @@ class UsersController extends Zend_Controller_Action {
 		// action body
 	}
 
+	public function namageAction() {
+		// action body
+	}
+
 	public function listAction() {
-		$model = new Model_DbTable_Users();
-		$this -> view -> list = $model -> fetchAll($model -> select() -> order('role') -> order('fname'));
+		// action body
 	}
 
 	public function deleteAction() {
-		$id = $this -> _request -> getParam('id');
-		$model = new Model_DbTable_Users();
+		// action body
+	}
 
-		if (Zend_Registry::get('id') == $id || Zend_Registry::get('role') == 'superadmin') {
-			$model -> delete('id = ' . $id);
-		}
-
-		if (Zend_Registry::get('role') == 'superadmin')
-			$this -> _redirect('users/list');
-		else
-			$this -> _redirect('index/invalid');
+	public function premiumAction() {
+		// action body
 	}
 
 	public function registerAction() {
@@ -82,6 +79,14 @@ class UsersController extends Zend_Controller_Action {
 		$this -> view -> form = $form;
 	}
 
+	public function cardAction() {
+		// action body
+	}
+
+	public function guideAction() {
+		// action body
+	}
+
 	public function activeAction() {
 		$code = md5($this -> _request -> getParam('code') . "lesson.foru.mn");
 		$model = new Model_DbTable_Activation();
@@ -109,7 +114,7 @@ class UsersController extends Zend_Controller_Action {
 			}
 		}
 	}
-
+	
 	public function manageAction() {
 		$val = $this -> _request -> getParam('val');
 		$id = Zend_Registry::get('id');
@@ -148,7 +153,7 @@ class UsersController extends Zend_Controller_Action {
 					$model = new Model_DbTable_Users();
 					$fname = $form -> getValue('fname');
 					$lname = $form -> getValue('lname');
-					$bio = $form -> getValue('bio');
+					$bio = base64_encode(($form -> getValue('bio')));
 					$iuser = $form -> getValue('ide_username');
 					$ipass = $form -> getValue('ide_password');
 					if ($ipass == NULL) {
@@ -165,7 +170,7 @@ class UsersController extends Zend_Controller_Action {
 			foreach ($result as $key => $value) {
 				$form -> getElement('fname') -> setValue($value -> fname);
 				$form -> getElement('lname') -> setValue($value -> lname);
-				$form -> getElement('bio') -> setValue($value -> bio);
+				$form -> getElement('bio') -> setValue(base64_decode($value -> bio));
 				$form -> getElement('ide_username') -> setValue($value -> iuser);
 				$form -> getElement('ide_password') -> setValue($value -> ipass);
 			}
@@ -200,7 +205,7 @@ class UsersController extends Zend_Controller_Action {
 
 		$this -> view -> form = $form;
 	}
-
+	
 	public function profileAction() {
 		$role = Zend_Registry::get('role');
 	}

@@ -14,11 +14,16 @@ class Form_Topic extends Zend_Form {
 		$descriptoin = new Zend_Form_Element_Textarea('description');
 		$descriptoin -> setLabel('Сэдвийн тодорхойлолт:')
 			  		 -> setAttrib('class', 'form-control summernote-small');
+					 
+		$format = new Zend_Form_Element_Select('format');
+		$format -> setLabel('Формат:') -> setAttrib('class', 'form-control');
+		$format -> addMultiOption('default', 'Default');
+		$format -> addMultiOption('md', 'Mark down');
 		
         $submit = new Zend_Form_Element_Submit('submit');
         $submit -> setLabel('Хадгалах')
 				-> setAttrib('class', 'btn btn-default');
         
-        $this -> addElements(array($name, $descriptoin, $submit));
+        $this -> addElements(array($name, $descriptoin, $format, $submit));
 	}
 }

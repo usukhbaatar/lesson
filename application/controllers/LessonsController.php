@@ -25,7 +25,7 @@ class LessonsController extends Zend_Controller_Action {
 				$model = new Model_DbTable_Lesson();
 				$name = $form -> getValue('name');
 				$order = count($model -> fetchAll('uid = ' . Zend_Registry::get('id')));
-				$description = $form -> getValue('description');
+				$description = base64_encode($form -> getValue('description'));
 				$public = $form -> getValue('public');
 				$id = $model -> insert(array('name' => $name, 'description' => $description, 'uid' => Zend_Registry::get('id'), 'order' => $order, 'ispublic' => $public));
 				if ($public == 1) {
@@ -59,21 +59,22 @@ class LessonsController extends Zend_Controller_Action {
 	public function editAction() {
 		$id = $this -> _request -> getParam('id');
 		$form = new Form_Lesson();
+		$form -> removeElement('public');
 		$request = $this -> getRequest();
 		$model = new Model_DbTable_Lesson();
 
 		if ($request -> isPost()) {
 			if ($form -> isValid($this -> _request -> getPost())) {
 				$name = $form -> getValue('name');
-				$description = $form -> getValue('description');
+				$description = base64_encode($form -> getValue('description'));
 				$model -> update(array('name' => $name, 'description' => $description), 'id = ' . $id);
-				$this -> _redirect('lessons/view/id/' . $id);
+				$this -> _redirect('lessons/list/');
 			}
 		}
 
 		foreach ($model -> fetchAll('id = ' . $id) as $key => $value) {
 			$form -> getElement('name') -> setValue($value -> name);
-			$form -> getElement('description') -> setValue($value -> description);
+			$form -> getElement('description') -> setValue(base64_decode($value -> description));
 		}
 
 		$form -> setAction($this -> view -> baseUrl() . '/lessons/edit/id/' . $id);

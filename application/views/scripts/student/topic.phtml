@@ -1,10 +1,3 @@
-<?php
-
-function replace($str, $c, $f) {
-	return str_replace($c, $f, $str);
-}
-?>
-
 <h2 class = "header"><?php echo $this -> topicName; ?></h2>
 <hr/>
 
@@ -34,7 +27,7 @@ function replace($str, $c, $f) {
 					<div class="caption"><?php echo $value -> title ?></div>
 				</div>
 				<div class="portlet-body">
-					<?php echo $value -> content; ?>
+					<?php echo base64_decode($value -> content); ?>
 				</div>
 			</div>
 		</div>
@@ -45,12 +38,7 @@ function replace($str, $c, $f) {
 					<div class="caption"><?php echo $value -> title ?></div>
 				</div>
 				<div class="portlet-body">
-					<?php
-						$str = $value -> content;
-						$str = replace($str, "<", "&lt");
-						$str = replace($str, ">", "&gt");
-					?>
-					<pre class = "ace-editor" id = "ace<?php echo $value -> id ?>"><?php echo $str ?></pre>
+					<pre class = "ace-editor" id = "ace<?php echo $value -> id ?>"><?php echo base64_decode($value -> content) ?></pre>
 				</div>
 			</div>
 		</div>
@@ -136,10 +124,6 @@ function replace($str, $c, $f) {
 			}
 		}
 	});
-    
-    function replaceAll(find, replace, str) {
-	  return str.replace(new RegExp(find, 'g'), replace);
-	}
 </script>
 
 <?php } ?>
